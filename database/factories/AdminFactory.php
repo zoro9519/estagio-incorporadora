@@ -1,0 +1,44 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Admin;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+class AdminFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Admin::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $faker = \Faker\Factory::create('pt_BR');
+        return [
+            'nome' => $this->faker->name(),
+
+            'status' => $this->faker->boolean(),
+            'logradouro' => $this->faker->streetAddress(),
+            'numero' => $this->faker->numberBetween(1, 5000),
+            'bairro' => $this->faker->streetName(),
+            'cidade' => $this->faker->city(),
+            'uf' => $this->faker->stateAbbr(),
+            'cep' => $this->faker->numerify("##########"),
+            'email' => $this->faker->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => Hash::make("teste"),
+            'remember_token' => Str::random(10),
+
+        ];
+    }
+}
