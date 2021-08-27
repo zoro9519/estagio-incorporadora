@@ -18,6 +18,7 @@ class CreateCorretorsTable extends Migration
 
             $table->string("nome", 100);
             $table->string("documento", 18);
+            $table->string("phone", 18);
             $table->decimal("taxa_venda_porcentagem");
             $table->decimal("taxa_venda_valor");
             $table->boolean("ativo");

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Loteamento;
+use App\Http\Controllers\Controller;
+use App\Models\Agendamento;
 use Illuminate\Http\Request;
 
-class LoteamentoController extends Controller
+class AgendamentoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +16,12 @@ class LoteamentoController extends Controller
     public function index()
     {
         //
+    }
+
+    public function all()
+    {
+        $agendamentos = Agendamento::get()->all();
+        return view("admin.agendamentos.index")->with("agendamentos", $agendamentos);
     }
 
     /**
@@ -41,21 +48,21 @@ class LoteamentoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function show(Loteamento $loteamento)
+    public function show(Agendamento $agendamento)
     {
-        return view("landing")->with("loteamento", $loteamento);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function edit(Loteamento $loteamento)
+    public function edit(Agendamento $agendamento)
     {
         //
     }
@@ -64,10 +71,10 @@ class LoteamentoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Loteamento $loteamento)
+    public function update(Request $request, Agendamento $agendamento)
     {
         //
     }
@@ -75,17 +82,11 @@ class LoteamentoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Loteamento $loteamento)
+    public function destroy(Agendamento $agendamento)
     {
         //
-    }
-
-    public function addToList(Request $request)
-    {
-        echo "Essa rota irá adicionar um cliente à newsletter desse loteamento";
-        echo "<br>Em desenvolvimento...";
     }
 }

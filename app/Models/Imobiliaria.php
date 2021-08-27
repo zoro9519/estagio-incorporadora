@@ -12,4 +12,8 @@ class Imobiliaria extends Model
     public function corretores(){
         return $this->hasMany(Corretor::class);
     }
+
+    protected $fillable = [
+
+    ];
 }

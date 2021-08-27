@@ -42,7 +42,42 @@ class LoteamentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $return = [
+            'success' => false,
+        ];
+
+        $request->validate([
+            'nome' => 'required',
+            'descricao'     => 'required',
+            'link'     => 'required',
+            'area'     => 'required'
+        ]);
+
+        $data = $request->all();
+
+        $loteamentoSearch = Loteamento::where("nome", $data['nome'])->orWhere("link", $data['link'])->first();
+
+        if($loteamentoSearch){
+            $return['message'] = "Nome já cadastrado";
+
+            if(strtolower($loteamentoSearch->link) == strtolower($data['link']))
+                $return['message'] = 'Link já cadastrado. Tente outros valores';
+        } else{
+
+            $loteamento = new Loteamento();
+
+            $loteamento->nome = $data['nome'];
+            $loteamento->descricao = $data['descricao'];
+            $loteamento->link = $data['link'];
+            $loteamento->area = $data['area'];
+            $loteamento->coordenada_id = 0;
+
+            $loteamento->save();
+
+            $return['success'] = true;
+        }
+
+        return redirect("admin/loteamentos");
     }
 
     /**

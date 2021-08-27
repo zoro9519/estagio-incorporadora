@@ -1,5 +1,8 @@
 @extends("templates.auth")
 
+@section("page_title")Esqueci a senha
+@endsection
+
 @section('content')
 <div class="login-box">
     <div class="login-logo">
@@ -27,7 +30,7 @@
         </form>
   
         <p class="mt-3 mb-1">
-          <a href="{{ route("user.auth") }}">Login</a>
+          <a href="{{ route("admin.auth") }}">Login</a>
         </p>
       </div>
       <!-- /.login-card-body -->

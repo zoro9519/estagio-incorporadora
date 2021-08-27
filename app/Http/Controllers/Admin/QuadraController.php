@@ -52,14 +52,28 @@ class QuadraController extends Controller
 
         $loteamento = Loteamento::find($data['loteamento_id']);
 
-        $quadra = new Quadra;
+        if(!$loteamento){
+            $return['message'] = "Loteamento não encontrado";
+        } else {
 
-        $quadra->descricao = $data['descricao'];
-        $quadra->loteamento_id = $loteamento->id;
+            $quadraSearch = Quadra::where("descricao", $data['descricao'])
+            ->where("loteamento_id", $data['loteamento_id'])
+            ->get();
 
-        $quadra->save();
+            if($quadraSearch){
+                $return['message'] = "Descrição de lote já cadastrado";
+            } else {
 
-        return view("admin.loteamentos.view")->with("loteamento", $loteamento);
+                $quadra = new Quadra;
+
+                $quadra->descricao = $data['descricao'];
+                $quadra->loteamento_id = $loteamento->id;
+
+                $quadra->save();
+            }
+        }
+
+        return redirect("admin/loteamentos/{$data['loteamento_id']}");
     }
 
     /**
@@ -78,10 +92,10 @@ class QuadraController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Quadra  $quadra
      * @return \Illuminate\Http\Response
      */
-    public function edit(Loteamento $loteamento)
+    public function edit(Quadra $quadra)
     {
         //
     }
@@ -90,10 +104,10 @@ class QuadraController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Quadra  $quadra
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Loteamento $loteamento)
+    public function update(Request $request, Quadra $quadra)
     {
         //
     }
@@ -101,11 +115,14 @@ class QuadraController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Quadra  $quadra
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Loteamento $loteamento)
+    public function destroy(Quadra $quadra)
     {
-        //
+        $parent_id = $quadra->loteamento_id;
+        $quadra->delete();
+
+        return redirect("admin/loteamentos/{$parent_id}");
     }
 }

@@ -17,4 +17,12 @@ class Loteamento extends Model
     public function quadras(){
         return $this->HasMany(Quadra::class);
     }
+
+    protected $fillable = [
+        'nome',
+        'descricao',
+        'link',
+        'area',
+        'coordenada_id'
+    ];
 }

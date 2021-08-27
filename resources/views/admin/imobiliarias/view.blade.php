@@ -78,8 +78,24 @@
                                     <div class="modal-body">
                                     
                                         <div class="form-group">
-                                            <label>Descrição:</label>
-                                            <input type="text" name="descricao">
+                                            <label>Nome:</label>
+                                            <input type="text" name="nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Documento:</label>
+                                            <input type="text" name="documento">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Celular:</label>
+                                            <input type="text" name="celular">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Taxa em % para vendas:</label>
+                                            <input type="text" name="taxa_venda_porcentagem">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Taxa em R$ para vendas:</label>
+                                            <input type="text" name="taxa_venda_valor">
                                         </div>
                                     </div>
                                     <div class="modal-footer justify-content-between">
@@ -97,7 +113,7 @@
                                     <thead>
                                         <th>#</th>
                                         <th>Nome</th>
-                                        <th>CRECI</th>
+                                        <th>Documento</th>
                                         <th>Nº de Vendas</th>
                                         <th>Ações</th>
                                     </thead>
@@ -105,9 +121,9 @@
                                         @foreach ($imobiliaria->corretores()->get() as $corretor)
                                             <tr>
                                                 <td>{{ $corretor->id }}</td>
-                                                <td>{{ $corretor->descricao }}</td>
-                                                <td>{{ date('H:i:s d/m/Y', strtotime($corretor->created_at)) }}</td>
-                                                <td>{{ $corretor->lotes()->count() }}</td>
+                                                <td>{{ $corretor->nome }}</td>
+                                                <td>{{ $corretor->documento }}</td>
+                                                <td>{{ $corretor->vendas()->count() }}</td>
                                                 <td>
                                                     <a class="btn btn-primary btn-sm"
                                                         href="{{ route('corretor.show', ['corretor' => $corretor]) }}">
@@ -119,7 +135,7 @@
                                                         </i>
                                                         Edit
                                                     </a> --}}
-                                                    <a class="btn btn-danger btn-sm" href="#">
+                                                    <a class="btn btn-danger btn-sm" href="{{ route("corretor.delete", [ 'corretor' => $corretor]) }}">
                                                         <i class="fas fa-trash">
                                                         </i>
                                                     </a>

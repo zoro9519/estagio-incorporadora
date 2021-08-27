@@ -30,22 +30,64 @@
                                 </button>
                                 </div>
                                 <div class="modal-body">
-                                
-                                    <div class="form-group">
-                                        <label>Nome:</label>
-                                        <input type="text" name="nome">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Razão Social:</label>
-                                        <input type="text" name="razao_social">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>CRECI:</label>
-                                        <input type="text" name="creci">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>CNPJ:</label>
-                                        <input type="text" name="cnpj">
+                                    <div class="row">
+
+                                        <div class="col col-6">
+                                            <h3>Informações de identificação</h3>
+                                            <div class="form-group">
+                                                <label>Nome:</label>
+                                                <input type="text" required='required' name="nome">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Razão Social:</label>
+                                                <input type="text" required='required' name="razao_social">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>CRECI:</label>
+                                                <input type="text" required='required' name="creci">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>CNPJ:</label>
+                                                <input type="text" required='required' name="cnpj">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email:</label>
+                                                <input type="text" required='required' name="email">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col col-6">
+
+                                            <h3>Dados de endereço</h3>
+                                            <div class="form-group">
+                                                <label>Logradouro:</label>
+                                                <input type="text" required='required' name="logradouro">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Numero:</label>
+                                                <input type="text" required='required' name="numero">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Complemento:</label>
+                                                <input type="text" name="complemento">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Bairro:</label>
+                                                <input type="text" required="required" name="bairro">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Cidade:</label>
+                                                <input type="text" required="required" name="cidade">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>CEP:</label>
+                                                <input type="text" required="required" name="cep">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>UF:</label>
+                                                <input type="text" required="required" name="uf">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer justify-content-between">
@@ -123,7 +165,7 @@
                                         </i>
                                         Edit
                                     </a> --}}
-                                    <a class="btn btn-danger btn-sm" href="#">
+                                    <a class="btn btn-danger btn-sm" href="{{ route("imobiliaria.delete", ['imobiliaria' => $imobiliaria]) }}">
                                         <i class="fas fa-trash">
                                         </i>
                                         Delete

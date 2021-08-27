@@ -118,7 +118,7 @@
                                                         <i class="fas fa-eye">
                                                         </i>
                                                     </a>
-                                                    <a class="btn btn-danger btn-sm" href="#">
+                                                    <a class="btn btn-danger btn-sm" href="{{ route('lote.delete', ['lote' => $lote]) }}">
                                                         <i class="fas fa-trash">
                                                         </i>
                                                     </a>

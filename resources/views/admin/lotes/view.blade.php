@@ -17,7 +17,7 @@
                         </tr>
                         <tr>
                             <td>Último Dono:</td>
-                            {{-- <td>{{ $lote->proprietarios()->atual() }}</td> --}}
+                            <td>{{ $lote->atual() }}</td>
                         </tr>
                         <tr>
                             <td>Criado Em:</td>
@@ -84,11 +84,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Data Início:</label>
-                                            <input type="text" name="data_inicio" class="">
+                                            <input type="date" name="data_inicio" class="">
                                         </div>
                                         <div class="form-group">
                                             <label>Data Fim:</label>
-                                            <input type="text" name="data_fim" class="">
+                                            <input type="date" name="data_fim" class="">
                                         </div>
 
                                     </div>
@@ -124,7 +124,7 @@
                                                         <i class="fas fa-eye">
                                                         </i>
                                                     </a>
-                                                    <a class="btn btn-danger btn-sm" href="#">
+                                                    <a class="btn btn-danger btn-sm" href="{{ route('proprietario.remove', ['proprietario' => $proprietario]) }}">
                                                         <i class="fas fa-trash">
                                                         </i>
                                                     </a>

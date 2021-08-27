@@ -1,5 +1,8 @@
 @extends("templates.auth")
 
+@section("page_title")Login
+@endsection
+
 @section('content')
     <div class="login-box">
         <div class="login-logo">
@@ -9,7 +12,7 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Faça login para acessar o sistema</p>
+                <p class="login-box-msg">Faça login para acessar como Admin</p>
 
                 <form action="{{route("admin.auth.login")}}" method="post">
                     @csrf
@@ -44,7 +47,10 @@
                 </form>
 
                 <p class="mb-1">
-                    <a href="{{ route("user.auth.remember") }}">Esqueci minha Senha</a>
+                    <a href="{{ route("admin.auth.remember") }}">Esqueci minha Senha</a>
+                </p>
+                <p class="mb-1">
+                    <a href="{{ route("user.auth") }}">Acesso via cliente</a>
                 </p>
             </div>
             <!-- /.login-card-body -->

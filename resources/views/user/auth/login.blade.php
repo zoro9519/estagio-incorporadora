@@ -1,5 +1,8 @@
 @extends("templates.auth")
 
+@section("page_title")Login
+@endsection
+
 @section('content')
     <div class="login-box">
         <div class="login-logo">
@@ -11,7 +14,7 @@
                 <p class="login-box-msg">Faça login para acessar o sistema</p>
 
                 <form action="{{route("user.auth.login")}}" method="post">
-                    {{-- {{ @csrf }} --}}
+                    @csrf
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" placeholder="Email">
                         <div class="input-group-append">
@@ -40,6 +43,9 @@
                 </p>
                 <p class="mb-0">
                     <a href="register.html" class="text-center">Cadastrar</a>
+                </p>
+                <p class="mb-1">
+                    <a href="{{ route("admin.auth") }}">Acesso Admin</a>
                 </p>
             </div>
             <!-- /.login-card-body -->

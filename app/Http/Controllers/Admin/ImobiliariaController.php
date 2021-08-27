@@ -21,7 +21,7 @@ class ImobiliariaController extends Controller
     public function all()
     {
         $imobiliarias = Imobiliaria::get()->all();
-        return view("admin.imobiliaria.index")->with("imobiliarias", $imobiliarias);
+        return view("admin.imobiliarias.index")->with("imobiliarias", $imobiliarias);
     }
 
     /**
@@ -42,7 +42,59 @@ class ImobiliariaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $return = [
+            'success' => false,
+        ];
+
+        $request->validate([
+            'nome' => 'required',
+            'razao_social'     => 'required',
+            'cnpj'     => 'required',
+            'creci'     => 'required',
+            'email'     => 'required',
+            'logradouro'     => 'required',
+            'numero'     => 'required',
+            'bairro'     => 'required',
+            'cep'     => 'required',
+            'uf'     => 'required'
+        ]);
+
+        $data = $request->all();
+
+        $imobiliariaSearch = Imobiliaria::where("cnpj", $data['cnpj'])->orWhere("razao_social", $data['razao_social'])->first();
+
+        if($imobiliariaSearch){
+            $return['message'] = "CNPJ já cadastrado";
+
+            if(strtolower($imobiliariaSearch->razao_social) == strtolower($data['razao_social']))
+                $return['message'] = 'Razão Social já cadastrada';
+        } else{
+
+            $imobiliaria = new Imobiliaria();
+
+            $imobiliaria->nome = $data['nome'];
+            $imobiliaria->cnpj = $data['cnpj'];
+            $imobiliaria->razao_social = $data['razao_social'];
+            $imobiliaria->creci = $data['creci'];
+            $imobiliaria->email = $data['email'];
+
+            $imobiliaria->logradouro = $data['logradouro'];
+            $imobiliaria->numero = $data['numero'];
+            $imobiliaria->bairro = $data['bairro'];
+            $imobiliaria->complemento = $data['complemento'] ?? "";
+            $imobiliaria->cidade = $data['cidade'];
+            $imobiliaria->cep = $data['cep'];
+            $imobiliaria->uf = $data['uf'];
+
+            $imobiliaria->status = true;
+
+            $imobiliaria->save();
+
+            $return['success'] = true;
+        }
+
+        return redirect("admin/imobiliarias");
+        // return redirect()->route("imobiliarias.all")->with("error", __("")));
     }
 
     /**
@@ -53,7 +105,7 @@ class ImobiliariaController extends Controller
      */
     public function show(Imobiliaria $imobiliaria)
     {
-        return view("admin.imobiliaria.view")->with("imobiliaria", $imobiliaria);
+        return view("admin.imobiliarias.view")->with("imobiliaria", $imobiliaria);
     }
 
     /**
@@ -87,6 +139,8 @@ class ImobiliariaController extends Controller
      */
     public function destroy(Imobiliaria $imobiliaria)
     {
-        //
+        $imobiliaria->delete();
+
+        return redirect("admin/imobiliarias");
     }
 }

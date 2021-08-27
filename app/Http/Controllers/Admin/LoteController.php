@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Loteamento;
 use App\Http\Controllers\Controller;
 use App\Models\Lote;
 use App\Models\Proprietario;
@@ -18,13 +17,13 @@ class LoteController extends Controller
      */
     public function index()
     {
-        return view("loteamentos.index");
+        return view("lotes.index");
     }
 
     public function all()
     {
-        $loteamentos = Loteamento::get()->all();
-        return view("admin.loteamentos.index")->with("loteamentos", $loteamentos);
+        $lotes = Lote::get()->all();
+        return view("admin.lotes.index")->with("lotes", $lotes);
     }
 
     /**
@@ -58,6 +57,10 @@ class LoteController extends Controller
 
         $lote = new Lote();
 
+        $data['valor'] = str_replace(",", ".", $data['valor']);
+        $data['valor'] = str_replace(".", "", $data['valor']);
+        $data['valor'] /= 100;
+
         $lote->descricao = $data['descricao'];
         $lote->status = 'L';
         $lote->area = $data['area'];
@@ -67,7 +70,7 @@ class LoteController extends Controller
 
         $lote->save();
 
-        return view("admin.quadras.view")->with("quadra", $quadra);
+        return redirect("admin/quadras/{$data['quadra_id']}");
     }
 
     /**
@@ -87,10 +90,10 @@ class LoteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Lote  $lote
      * @return \Illuminate\Http\Response
      */
-    public function edit(Loteamento $loteamento)
+    public function edit(Lote $lote)
     {
         //
     }
@@ -99,10 +102,10 @@ class LoteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Lote  $lote
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Loteamento $loteamento)
+    public function update(Request $request, Lote $lote)
     {
         //
     }
@@ -110,12 +113,15 @@ class LoteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Loteamento  $loteamento
+     * @param  \App\Models\Lote  $lote
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Loteamento $loteamento)
+    public function destroy(Lote $lote)
     {
-        //
+        $parent_id = $lote->quadra_id;
+        $lote->delete();
+
+        return redirect("admin/quadras/{$parent_id}");
     }
 
     public function adicionarProprietario(Lote $lote, Request $request){
@@ -141,6 +147,14 @@ class LoteController extends Controller
 
         $proprietario->save();
 
-        return view("admin.lotes.view")->with("lote", $lote);
+        return redirect("admin/lotes/{$lote->id}");
+    }
+
+    public function removerProprietario(Proprietario $proprietario)
+    {
+        $parent_id = $proprietario->lote_id;
+        $proprietario->delete();
+
+        return redirect("admin/lotes/{$parent_id}");
     }
 }
