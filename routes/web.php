@@ -35,8 +35,9 @@ Route::prefix("admin")->group(function(){
         Route::post("forgot", [\App\Http\Controllers\Admin\AuthController::class, "forgot"])->name("admin.auth.forgot");
         Route::post("reset", [\App\Http\Controllers\Admin\AuthController::class, "reset"])->name("admin.auth.reset");
     });
-    
-    Route::middleware('auth:admin')->group(function () {
+});
+
+Route::middleware('auth:admin')->group(function () {
         
         Route::get("auth/logout", [\App\Http\Controllers\Admin\AuthController::class, "logout"])->name("admin.auth.logout");
         Route::get("/", [AdminController::class, 'index'])->name("admin.home");
@@ -261,7 +262,8 @@ Route::prefix("user")->group(function(){
     
 });
 
-Route::any('{loteamento:link}', [\App\Http\Controllers\LoteamentoController::class, 'show']);
+Route::any('{loteamento:link}', [\App\Http\Controllers\LoteamentoController::class, 'show'])->name("landing.view");
+Route::post('{loteamento:link}/save', [\App\Http\Controllers\LoteamentoController::class, 'addToList'])->name("landing.save");
 
 // Route::any('{url}', function(){
 //     return ResponseHelper::error(__('Página não encontrada'), 404, []);
