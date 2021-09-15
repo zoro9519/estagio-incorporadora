@@ -17,22 +17,22 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('nome');
 
-            $table->string('phone', 18);
-            $table->string('cpf', 15);
-            $table->boolean('status');
+            $table->string('cpf', 15)->nullable();
+            $table->string('phone', 18)->nullable();
+            $table->enum('status', [ 'A', 'V', 'E', 'D']);
 
             // Endereco
-            $table->string("logradouro", 100);
-            $table->string("numero", 10);
+            $table->string("logradouro", 100)->nullable();
+            $table->string("numero", 10)->nullable();
             $table->string("complemento", 100)->default("");
-            $table->string("bairro", 100);
-            $table->string("cidade", 100);
-            $table->string("uf", 2);
-            $table->string("cep", 10);
+            $table->string("bairro", 100)->nullable();
+            $table->string("cidade", 100)->nullable();
+            $table->string("uf", 2)->nullable();
+            $table->string("cep", 10)->nullable();
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -15,9 +15,26 @@
     {{-- <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css"> --}}
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('template/assets/adminlte.css') }}">
+
+    @if(env("GCP_MAPS_ENABLED", 0))
+    <style>
+        #map {
+            height: 100%;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+    @endif
+    @yield("styles")
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background-color: @yield("cor_fundo")">
 
     @yield("content")
 

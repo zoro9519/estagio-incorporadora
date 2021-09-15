@@ -18,6 +18,24 @@ class Loteamento extends Model
         return $this->HasMany(Quadra::class);
     }
 
+    public function coordenada(){
+        return $this->belongsTo(Coordenada::class);
+    }
+
+    public function landingPage(){
+        return $this->hasOne(LandingPage::class);
+    }
+
+    public function assets()
+    {
+        return $this->belongsToMany(Asset::class, "loteamento_assets", "asset_id", "loteamento_id");
+    }
+
+    public function interessados()
+    {
+        return $this->belongsToMany(User::class, 'newsletter_loteamento_users', 'loteamento_id', 'user_id');
+    }
+
     protected $fillable = [
         'nome',
         'descricao',

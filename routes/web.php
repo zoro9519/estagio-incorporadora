@@ -47,6 +47,12 @@ Route::middleware('auth:admin')->group(function () {
             Route::get("/", [\App\Http\Controllers\Admin\LoteamentoController::class, 'all'])->name("loteamento.all");
             Route::get("{loteamento}", [\App\Http\Controllers\Admin\LoteamentoController::class, 'show'])->name("loteamento.show");
             Route::post("store", [\App\Http\Controllers\Admin\LoteamentoController::class, 'store'])->name("loteamento.store");
+
+            Route::post("{loteamento}/updateLocation", [\App\Http\Controllers\Admin\LoteamentoController::class, 'updateLocation'])->name("loteamento.updateLocation");
+
+            Route::post("{loteamento}/landing/update", [\App\Http\Controllers\Admin\LoteamentoController::class, 'updateLandingPage'])->name("loteamento.editLandingLayout");
+            Route::post("{loteamento}/landing/uploadFile", [\App\Http\Controllers\Admin\LoteamentoController::class, 'uploadFile'])->name("loteamento.uploadFile");
+            Route::get("{loteamento}/landing/uploadFile", [\App\Http\Controllers\Admin\LoteamentoController::class, 'uploadFile'])->name("loteamento.uploadFile");
             
 
             Route::post("/favorite/{product}", [ProductController::class, 'setFavorite']);
@@ -101,7 +107,9 @@ Route::middleware('auth:admin')->group(function () {
             Route::post("{lote}/adicionar_proprietario", [\App\Http\Controllers\Admin\LoteController::class, 'adicionarProprietario'])->name("lote.adicionar_proprietario");
         });
 
-
+        Route::prefix("assets")->group(function(){
+            Route::get("{asset}/delete", [\App\Http\Controllers\AssetController::class, 'destroy'])->name("asset.delete");
+        });
 
         // Admin / Imobiliarias
         Route::prefix("imobiliarias")->group(function() {
@@ -137,6 +145,7 @@ Route::middleware('auth:admin')->group(function () {
         // Handle user notifications
         Route::prefix("users")->group(function() {
             Route::get("/", [App\Http\Controllers\Admin\UserController::class, "all"])->name("user.all");
+            Route::get("{user}", [App\Http\Controllers\Admin\UserController::class, "show"])->name("user.show");
         });
         Route::prefix("agendamentos")->group(function() {
             Route::get("/", [App\Http\Controllers\Admin\AgendamentoController::class, "all"])->name("agendamento.all");
@@ -245,7 +254,7 @@ Route::prefix("user")->group(function(){
 });
 
 Route::any('{loteamento:link}', [\App\Http\Controllers\LoteamentoController::class, 'show'])->name("landing.view");
-Route::post('{loteamento:link}/save', [\App\Http\Controllers\LoteamentoController::class, 'addToList'])->name("landing.save");
+Route::post('{loteamento:link}/save', [\App\Http\Controllers\NewsletterMemberController::class, 'registerMember'])->name("landing.save");
 
 // Route::any('{url}', function(){
 //     return ResponseHelper::error(__('Página não encontrada'), 404, []);

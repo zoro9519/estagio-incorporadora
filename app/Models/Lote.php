@@ -23,6 +23,11 @@ class Lote extends Model
         // ->or("data_fim", ">=", Carbon::now());
     }
 
+    public function interessados()
+    {
+        return $this->belongsToMany(User::class, 'newsletter_lote_users', 'lote_id', 'user_id');
+    }
+
     protected $fillable = [
         'descricao',
         'area',

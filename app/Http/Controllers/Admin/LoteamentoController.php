@@ -4,7 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Loteamento;
 use App\Http\Controllers\Controller;
+use App\Models\Asset;
+use App\Models\LandingPage;
+use App\Models\Lote;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class LoteamentoController extends Controller
 {
@@ -74,6 +80,11 @@ class LoteamentoController extends Controller
 
             $loteamento->save();
 
+            // Salva landing page e vincula ao loteamento
+            $landing = new LandingPage;
+            $landing->loteamento_id = $loteamento->id;
+            $landing->save();
+
             $return['success'] = true;
         }
 
@@ -123,5 +134,83 @@ class LoteamentoController extends Controller
     public function destroy(Loteamento $loteamento)
     {
         //
+    }
+
+    public function updateLandingPage(Loteamento $loteamento, Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'descricao' => "required|min:1"
+        ])->validate();
+
+        $data = $request->all();
+
+        $landing = new LandingPage();
+
+        $landing->descricao = $data['descricao'];
+        $landing->cor_fundo = $data['cor_fundo'];
+        $landing->cor_texto = $data['cor_texto'];
+        $landing->loteamento_id = $loteamento->id;
+
+        $loteamento->landingPage()->updateOrCreate([
+            'loteamento_id' => $landing->loteamento_id
+        ], [
+            'descricao' => $landing->descricao,
+            'cor_fundo' => $landing->cor_fundo,
+            'cor_texto' => $landing->cor_texto,
+        ]);
+        
+        return redirect()->back()->withErrors($validator, 'landing_layout');
+    }
+
+    public function uploadFile(Loteamento $loteamento, Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'file' => "required|file|mimes:jpeg,png,bmp,tiff,mpeg,ogg,mp4,webm,3gp,mov,flv,avi,wmv,ts",
+            'type' => "required|in:image,video"
+        ])->validate();
+
+        $data = $request->all();
+        
+        try {
+
+            $fileToSend = $request->file("file");
+
+            $AWSFile = $fileToSend->storePublicly("assets", 's3');
+            
+            $asset = new Asset();
+
+            $asset->filepath = $AWSFile;
+            $asset->type = $data['type'] == 'image' ? "I" : "V";
+
+            $asset->save();
+
+            $loteamento->assets()->attach($asset->id);
+
+        } catch(Exception $e){
+            $return['message'] = __("Não foi possível realizar o upload");
+        }
+        
+        return redirect()->back()->withErrors($validator, 'assets');
+    }
+
+    public function updateLocation(Loteamento $loteamento, Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'latitude' => "required",
+            'longitude' => "required"
+        ])->validate();
+
+        $data = $request->all();
+        
+
+        $loteamento->coordenada()->updateOrCreate([
+            'id' => $loteamento->coordenada_id
+        ], [
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+            'zoom'      => $data['zoom']
+        ]);
+
+        return redirect()->back()->withErrors($validator, 'assets');
     }
 }

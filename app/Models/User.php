@@ -40,4 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function lotesDeInteresse(){
+        return $this->belongsToMany(Lote::class, "newsletter_lote_users", "user_id", "lote_id");
+    }
+
+    public function loteamentosDeInteresse(){
+        return $this->belongsToMany(Loteamento::class, "newsletter_loteamento_users", "user_id", "loteamento_id");
+    }
 }

@@ -117,11 +117,11 @@
                             </td>
                             <td class="text-center">
                                 <span class="badge badge-warning">
-                                    0
-                                    {{-- {{ $loteamento->lotes()->where("status", "L")->count() }} --}}
+                                    
+                                    {{ $loteamento->interessados()->count() }}
                                 </span>
                             </td>
-                            <td class="project-actions text-right">
+                            <td class="project-actions text-center">
                                 <a class="btn btn-primary btn-sm"
                                     href="{{ route('loteamento.show', ['loteamento' => $loteamento]) }}">
                                     <i class="fas fa-folder"></i> View

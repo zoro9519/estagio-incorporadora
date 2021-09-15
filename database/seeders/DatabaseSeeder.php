@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('11223344'),
                 'cpf' => '417.105.558-07',
                 'phone' => '18998109428',
-                'status' => 1,
+                'status' => 'A',
 
                 'logradouro' => 'Rua Maria Antonia',
                 'numero' => '1198',

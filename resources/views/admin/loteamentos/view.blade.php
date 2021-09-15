@@ -1,15 +1,23 @@
 @extends("templates.admin")
 
 @section('content')
+
+    <script>
+        var LatLanding = {{ $loteamento->coordenada->latitude ?? env('GCP_DEFAULT_LAT') }};
+        var LongLanding = {{ $loteamento->coordenada->longitude ?? env('GCP_DEFAULT_LONG') }};
+        var ZoomLanding = {{ $loteamento->coordenada->zoom ?? env('GCP_DEFAULT_ZOOM') }};
+        var MustAddMarker =
+            {{ isset($loteamento->coordenada->latitude) && isset($loteamento->coordenada->longitude) ? '1' : '0' }};
+    </script>
     <section class="content">
 
         <div class="row">
-            <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+            <div class="col-12 col-md-12 col-lg-6 order-2 order-md-1">
 
                 <h4 class="p-2 mt-5">Dados do Loteamento</h4>
 
                 <div class="table">
-                    <table class="">
+                    <table class="___class_+?5___">
                         <tr>
                             <td>Nome:</td>
                             <td>{{ $loteamento->nome }}</td>
@@ -36,10 +44,21 @@
                 </div>
 
             </div>
-            <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+            <div class="col-12 col-md-12 col-lg-5 order-1 order-md-2">
 
                 <h4 class="mt-5">Dados de localização</h4>
 
+                <div id="map"></div>
+
+                <form action="{{ route('loteamento.updateLocation', ['loteamento' => $loteamento]) }}" method="post"
+                    id="frmUpdateLocation">
+                    @csrf
+                    <input id="txtLatitude" name="latitude" type="text" style="display: none">
+                    <input id="txtLongitude" name="longitude" type="text" style="display: none">
+                    <input id="txtZoom" name="zoom" type="text" style="display: none">
+                    <button class="btn btn-success" type="submit" id="btnSaveLocation" style="display: none">Atualizar
+                        Dados</button>
+                </form>
             </div>
         </div>
         <hr>
@@ -52,7 +71,7 @@
                             <div class="col col-8">
                                 <h4 class="card-title ">
                                     <a class="d-block " data-toggle="collapse" href="#quadras" aria-expanded="true">
-                                        <h4 class=""> Quadras</h4>
+                                        <h4 class="___class_+?17___"> Quadras</h4>
                                     </a>
                                 </h4>
                             </div>
@@ -67,31 +86,33 @@
                         {{-- Modal Add Quadra --}}
                         <div class="modal fade" id="modal-add-quadra" style="display: none;" aria-hidden="true">
                             <div class="modal-dialog">
-                              <div class="modal-content">
-                                  <form method="POST" action="{{route("quadra.store")}}">
-                                    @csrf
-                                    <input type="hidden" name="loteamento_id" value="{{ $loteamento->id }}">
-                                    <div class="modal-header">
-                                    <h4 class="modal-title">Adicionar Quadra</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                    </div>
-                                    <div class="modal-body">
-                                    
-                                        <div class="form-group">
-                                            <label>Descrição:</label>
-                                            <input type="text" name="descricao">
+                                <div class="modal-content">
+                                    <form method="POST" action="{{ route('quadra.store') }}">
+                                        @csrf
+                                        <input type="hidden" name="loteamento_id" value="{{ $loteamento->id }}">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Adicionar Quadra</h4>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer justify-content-between">
-                                        <button type="submit" class="btn btn-primary">Criar Quadra</button>
-                                    </div>
-                              </div>
-                              <!-- /.modal-content -->
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label>Descrição:</label>
+                                                <input type="text" name="descricao">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="submit" class="btn btn-primary">Criar Quadra</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.modal-content -->
                             </div>
                             <!-- /.modal-dialog -->
-                          </div>
+                        </div>
                         <div id="quadras" class="collapse show w-100" data-parent="#lista_exibe" style="">
                             <div class="card-body">
 
@@ -121,7 +142,8 @@
                                                         </i>
                                                         Edit
                                                     </a> --}}
-                                                    <a class="btn btn-danger btn-sm" href="{{route("quadra.delete", [ 'quadra' => $quadra ])}}">
+                                                    <a class="btn btn-danger btn-sm"
+                                                        href="{{ route('quadra.delete', ['quadra' => $quadra]) }}">
                                                         <i class="fas fa-trash">
                                                         </i>
                                                     </a>
@@ -133,7 +155,154 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
+        <div class="row">
+            <div class="col" id="lista_images">
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row p-3">
+                            <div class="col col-8">
+                                <h4 class="card-title ">
+                                    <a class="d-block " data-toggle="collapse" href="#landing" aria-expanded="true">
+                                        <h4 class="___class_+?17___">Landing Page </h4>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="col col-4 text-right">
+                                {{-- <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-add-quadra">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                </a> --}}
+                            </div>
+                        </div>
+
+                        <div id="landing" class="collapse show w-100" data-parent="#lista_exibe" style="">
+                            <div class="card-body">
+                                <form id="updateLandingPage" method='POST'
+                                    action="{{ route('loteamento.editLandingLayout', ['loteamento' => $loteamento]) }}">
+                                    @csrf
+                                    <h2>Textos</h2>
+
+                                    {{-- Exibir erros --}}
+
+
+                                    <div class="form-group">
+                                        <label for="descricao">Descrição</label>
+                                        <textarea class="w-100"
+                                            name="descricao">{{ $loteamento->landingPage->descricao ?? '' }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Cor de Fundo</label>
+                                        <input type="color" name="cor_fundo"
+                                            value="{{ $loteamento->landingPage->cor_fundo ?? '' }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Cor do Texto</label>
+                                        <input type="color" name="cor_texto"
+                                            value="{{ $loteamento->landingPage->cor_texto ?? '' }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" id="updateLandingPage" class="btn btn-success">Enviar</button>
+                                    </div>
+                                </form>
+
+
+                                <hr>
+
+                                <div class="row">
+                                    <div class="col-3">
+                                        <h2>Arquivos</h2>
+                                    </div>
+                                    <div class="col-2 offset-7 text-right">
+                                        <a class="btn btn-primary" href="#" data-toggle="modal"
+                                            data-target="#modal-add-file">
+                                            <i class="fas fa-plus">
+                                            </i>
+                                        </a>
+                                        {{-- Modal Add Imagem --}}
+                                        <div class="modal fade" id="modal-add-file" style="display: none;"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form method="POST" enctype="multipart/form-data"
+                                                        action="{{ route('loteamento.uploadFile', ['loteamento' => $loteamento]) }}"
+                                                        id="formAddImage">
+                                                        @csrf
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Enviar Arquivo</h4>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <div class="form-group">
+                                                                <label>Arquivo:</label>
+                                                                <input type="file" id="file" name="file" required />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Tipo:</label>
+                                                                <select name="type" required>
+                                                                    <option value="">Selecione</option>
+                                                                    <option value="image">Imagem</option>
+                                                                    <option value="video">Vídeo</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer justify-content-between">
+                                                            <button type="submit" id="sendFile"
+                                                                class="btn btn-primary">Enviar</button>
+                                                        </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table">
+                                    <thead>
+                                        <th>#</th>
+                                        <th>Criado em</th>
+                                        <th>Ações</th>
+                                    </thead>
+                                    <tbody id="files_list">
+                                        @foreach ($loteamento->assets()->get() as $asset)
+
+                                            <tr id="r-{{ $asset->id }}">
+                                                <td>
+                                                    @if ($asset->type == 'I')
+                                                        <img src="{{ env("AWS_BASE") . $asset->filepath }}" class="img-list" style="max-width:300px"/>
+                                                    @else
+                                                        <video src="{{ $asset->filepath }}"
+                                                            class="img-list"></video>
+                                                    @endif
+                                                </td>
+                                                <td>{{ date('H:i:s d/m/Y', strtotime($asset->created_at)) }}</td>
+                                                <td>
+                                                    <a class="btn btn-danger btn-sm" data-delete="{{ $asset->id }}" href="{{route("asset.delete", [ 'asset' => $asset ])}}">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-@endsection
+
+    <script src="{{ url('js/loteamentos/view.js') }}"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GCP_MAPS_API', '') }}&callback=initMap"></script>
+    @endsection

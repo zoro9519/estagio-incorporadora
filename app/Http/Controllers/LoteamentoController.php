@@ -82,10 +82,4 @@ class LoteamentoController extends Controller
     {
         //
     }
-
-    public function addToList(Request $request)
-    {
-        echo "Essa rota irá adicionar um cliente à newsletter desse loteamento";
-        echo "<br>Em desenvolvimento...";
-    }
 }
