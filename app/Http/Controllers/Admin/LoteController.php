@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Corretor;
+use App\Models\Imobiliaria;
 use App\Models\Lote;
 use App\Models\Proprietario;
 use App\Models\Quadra;
+use App\Models\Venda;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoteController extends Controller
 {
@@ -81,10 +85,11 @@ class LoteController extends Controller
      */
     public function show(Lote $lote)
     {
-        // var_dump($lote);
-        // die;
-        
-        return view("admin.lotes.view")->with("lote", $lote);
+        // $lote = Lote::find($lote->id)-with(['agendamentos', 'agendamentos.cliente']);
+        $corretores = Corretor::whereNull("imobiliaria_id")->get();
+        $imobiliarias = Imobiliaria::has("corretores")->get();
+
+        return view("admin.lotes.view")->with("lote", $lote)->with("corretores", $corretores)->with("imobiliarias", $imobiliarias);
     }
 
     /**
@@ -128,8 +133,8 @@ class LoteController extends Controller
         $request->validate([
             'documento'     => 'required',
             'nome'          => 'required',
-            'data_inicio'   => 'required',
-            'data_fim'      => 'required'
+            'data_inicio'   => 'required'
+            // 'data_fim'      => ''
         ]);
 
         $data = $request->all();
@@ -141,7 +146,8 @@ class LoteController extends Controller
         $proprietario->nome = $data['nome'];
         $proprietario->documento = $data['documento'];
         $proprietario->data_inicio = $data['data_inicio'];
-        $proprietario->data_fim = $data['data_fim'];
+        
+        $proprietario->data_fim = $data['data_fim'] ?? null;
         
         $proprietario->lote_id = $lote->id;
 
@@ -156,5 +162,34 @@ class LoteController extends Controller
         $proprietario->delete();
 
         return redirect("admin/lotes/{$parent_id}");
+    }
+
+    public function vender(Lote $lote, Request $request)
+    {
+        $request->validate([
+            "valor"             => 'required|numeric',
+            "forma_pagamento"   => 'required',
+            "numero_parcelas"   => 'required|numeric|min:1',
+        ]);
+
+        $dados = $request->all();
+
+        $venda = new Venda;
+        $venda->admin_id = Auth::user()->id;
+        $venda->lote_id = $lote->id;
+        $venda->user_id = $dados['user'];
+        $venda->corretor_id = $dados['corretor'];
+
+        $venda->nro_parcelas = $dados['numero_parcelas'];
+        $venda->forma_pagamento = $dados['forma_pagamento'];
+        $venda->valor = $dados['valor'];
+
+        $venda->save();
+
+        $lote->status = 'V'; // Lote vendido
+        $lote->save();
+
+        // Disparar email para cliente de lote vendido
+        return back()->with("success", "Este lote foi vendido");
     }
 }

@@ -11,6 +11,7 @@ class Coordenada extends Model
 
     protected $fillable = [
         'latitude',
-        'longitude'
+        'longitude',
+        'zoom'
     ];
 }

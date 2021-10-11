@@ -52,13 +52,14 @@ class QuadraController extends Controller
 
         $loteamento = Loteamento::find($data['loteamento_id']);
 
+        $return['success'] = false;
         if(!$loteamento){
             $return['message'] = "Loteamento não encontrado";
         } else {
 
             $quadraSearch = Quadra::where("descricao", $data['descricao'])
             ->where("loteamento_id", $data['loteamento_id'])
-            ->get();
+            ->first();
 
             if($quadraSearch){
                 $return['message'] = "Descrição de lote já cadastrado";
@@ -70,10 +71,16 @@ class QuadraController extends Controller
                 $quadra->loteamento_id = $loteamento->id;
 
                 $quadra->save();
+                $return['success'] = true;
             }
         }
 
-        return redirect("admin/loteamentos/{$data['loteamento_id']}");
+        if($return['success']){
+            return redirect("admin/loteamentos/{$data['loteamento_id']}");
+            
+        }
+        return redirect("admin/loteamentos/{$data['loteamento_id']}")->with("error_message_quadra", $return['message']);
+
     }
 
     /**

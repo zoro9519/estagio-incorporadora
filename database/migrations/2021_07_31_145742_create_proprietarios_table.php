@@ -19,7 +19,7 @@ class CreateProprietariosTable extends Migration
             $table->string("nome", 100);
             $table->string("documento", 18);
             $table->dateTime("data_inicio");
-            $table->dateTime("data_fim");
+            $table->dateTime("data_fim")->nullable();
 
             $table->foreignId("lote_id")->index();
 

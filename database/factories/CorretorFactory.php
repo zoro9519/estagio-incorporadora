@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Corretor;
+use App\Models\Imobiliaria;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CorretorFactory extends Factory
@@ -21,8 +22,17 @@ class CorretorFactory extends Factory
      */
     public function definition()
     {
+        $imobiliaria = Imobiliaria::factory()->create();
+        $faker = \Faker\Factory::create('pt_BR');
+
         return [
-            //
+            "nome" => $this->faker->name(),
+            "documento" => $faker->cpf(),
+            "phone" => $faker->phoneNumber(),
+            "taxa_venda_porcentagem" => $this->faker->randomFloat(3, null, 100),
+            "taxa_venda_valor" => $this->faker->randomFloat(2, 0, 2000),
+            "ativo" => $this->faker->boolean(80),
+            "imobiliaria_id" => $imobiliaria
         ];
     }
 }

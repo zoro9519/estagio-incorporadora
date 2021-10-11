@@ -23,7 +23,7 @@ class CreateCorretorsTable extends Migration
             $table->decimal("taxa_venda_valor");
             $table->boolean("ativo");
 
-            $table->foreignId("imobiliaria_id")->index();
+            $table->foreignId("imobiliaria_id")->index()->nullable();
 
             $table->timestamps();
         });

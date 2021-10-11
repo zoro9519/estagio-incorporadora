@@ -99,8 +99,7 @@ class NewsletterMemberController extends Controller
 
         $userSearch = User::where("email", $data['email'])->get()[0] ?? [];
         $user = $userSearch;
-        // var_dump($userSearch);
-        //     die($user->id);
+
         if(empty($userSearch)){
             $user = new User();
 

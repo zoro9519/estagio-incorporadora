@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Proprietario;
+use App\Models\Admin;
+use App\Models\Loteamento;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class ProprietarioController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +16,25 @@ class ProprietarioController extends Controller
      */
     public function index()
     {
-        //
+        $loteamentos = Loteamento::all();
+        return view("user.index")->with("loteamentos", $loteamentos);
     }
 
+    public function search(Request $request){
+        $ret = [ 'success' => false ];
+
+        $document = $request->input("document");
+        $user = null;
+        
+        if($document && ($user = User::where("cpf", $document)->first())){
+
+            $ret['success'] = true;
+            $ret['user'] = $user;
+        } else {
+            $ret['error_message'] = "Cliente não encontrado";
+        }
+        return $ret;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -41,10 +59,10 @@ class ProprietarioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Proprietario  $proprietario
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show(Proprietario $proprietario)
+    public function show(Admin $admin)
     {
         //
     }
@@ -52,10 +70,10 @@ class ProprietarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Proprietario  $proprietario
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit(Proprietario $proprietario)
+    public function edit(Admin $admin)
     {
         //
     }
@@ -64,10 +82,10 @@ class ProprietarioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Proprietario  $proprietario
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Proprietario $proprietario)
+    public function update(Request $request, Admin $admin)
     {
         //
     }
@@ -75,10 +93,10 @@ class ProprietarioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Proprietario  $proprietario
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Proprietario $proprietario)
+    public function destroy(Admin $admin)
     {
         //
     }

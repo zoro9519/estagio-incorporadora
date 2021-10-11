@@ -1,14 +1,14 @@
 @extends("templates.admin")
 
 @section('content')
-    <section class="content">
+    <section class="content p-2">
 
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col">
-                        <h3 class="card-title">Loteamentos</h3>
+                    <div class="col col-8">
+                        <h4 class="">Loteamentos</h4>
                     </div>
                     <div class="col col-4 text-right">
                         <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-add-loteamento">
@@ -21,7 +21,7 @@
         <div class="modal fade" id="modal-add-loteamento" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="POST" action="{{ route('loteamento.store') }}">
+                    <form method="POST" action="{{ route('admin.loteamentos.store') }}">
                         @csrf
                         <div class="modal-header">
                             <h4 class="modal-title">Adicionar Loteamento</h4>
@@ -33,22 +33,22 @@
 
                             <div class="form-group">
                                 <label>Nome:</label>
-                                <input type="text" name="nome">
+                                <input type="text" name="nome" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label>Link:</label>
-                                <input type="text" name="link">
+                                <input type="text" name="link" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label>Descrição:</label>
-                                <input type="text" name="descricao">
+                                <input type="text" name="descricao" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label>Área:</label>
-                                <input type="number" step="0.1" name="area">
+                                <input type="number" step="0.1" name="area" class="form-control">
                             </div>
                         </div>
-                        <div class="modal-footer justify-content-between">
+                        <div class="modal-footer text-right">
                             <button type="submit" class="btn btn-primary">Criar Loteamento</button>
                         </div>
                 </div>
@@ -123,7 +123,7 @@
                             </td>
                             <td class="project-actions text-center">
                                 <a class="btn btn-primary btn-sm"
-                                    href="{{ route('loteamento.show', ['loteamento' => $loteamento]) }}">
+                                    href="{{ route('admin.loteamentos.show', ['loteamento' => $loteamento]) }}">
                                     <i class="fas fa-folder"></i> View
                                 </a>
                                 {{-- <a class="btn btn-info btn-sm" href="#">

@@ -12,9 +12,20 @@ class CorretorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, $imobiliaria_id = "")
     {
-        //
+        if($imobiliaria_id){
+            $corretores = Corretor::where("imobiliaria_id", $imobiliaria_id)->get();
+        } else {
+            $corretores = Corretor::whereNull("imobiliaria_id")->get();
+        }
+
+        $ret = [
+            "success" =>  true,
+            "corretores" => $corretores
+        ];
+
+        return $ret;
     }
 
     /**

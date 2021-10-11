@@ -19,8 +19,18 @@ class Lote extends Model
     }
 
     public function atual(){
-        return $this->hasMany(Proprietario::class)->get()->where("data_fim", null);
+        return $this->hasMany(Proprietario::class)->where("data_fim", null)->get();
         // ->or("data_fim", ">=", Carbon::now());
+    }
+
+    public function agendamentos()
+    {
+        return $this->hasMany(Agendamento::class);
+    }
+
+    public function venda()
+    {
+        return $this->hasOne(Venda::class);
     }
 
     public function interessados()

@@ -201,14 +201,13 @@ class LoteamentoController extends Controller
         ])->validate();
 
         $data = $request->all();
-        
 
         $loteamento->coordenada()->updateOrCreate([
-            'id' => $loteamento->coordenada_id
+            'id' => $loteamento->coordenada->id
         ], [
             'latitude' => $data['latitude'],
             'longitude' => $data['longitude'],
-            'zoom'      => $data['zoom']
+            'zoom'      => $data['zoom'] ?? 7
         ]);
 
         return redirect()->back()->withErrors($validator, 'assets');

@@ -53,7 +53,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view("admin.users.view")->with("user", $user);
     }
 
     /**
@@ -88,5 +88,20 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    public function aprovar(User $user){
+
+        if($user->status == 'A'){
+            
+            // Define status de aprovado
+            $user->status = 'V';
+            $user->save();
+
+
+            return back()->with("success", "Conta aprovada!");
+        } else {
+            return back()->with("error", "Conta não está apta para ser aprovada");
+        }
     }
 }

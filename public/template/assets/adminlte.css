@@ -12244,7 +12244,8 @@ body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-m
     transition: none;
   }
 }
-
+/* 
+Estava movendo o conteúdo para debaixo do menu lateral
 @media (min-width: 768px) {
   .sidebar-collapse body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper, .sidebar-collapse
   body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer, .sidebar-collapse
@@ -12259,7 +12260,7 @@ body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-m
   body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
     margin-left: 0;
   }
-}
+} */
 
 @media (min-width: 768px) {
   .sidebar-mini-md .content-wrapper,

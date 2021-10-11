@@ -9,60 +9,66 @@
         var MustAddMarker =
             {{ isset($loteamento->coordenada->latitude) && isset($loteamento->coordenada->longitude) ? '1' : '0' }};
     </script>
-    <section class="content">
+    <section class="content card-body">
 
         <div class="row">
-            <div class="col-12 col-md-12 col-lg-6 order-2 order-md-1">
+            <div class="col-12">
+                <div class="card h-100 ">
+                    <div class="card-header h-100 ">
+                        <div class="row">
+                            <div class="col col-12 col-lg-6">
+                                <h4 class="d-block"> Dados do Loteamento</h4>
+                                <div class="table mt-3">
+                                    <table class="">
+                                        <tr>
+                                            <td>Nome:</td>
+                                            <td>{{ $loteamento->nome }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Link:</td>
+                                            <td><a
+                                                    href="{{ env('APP_URL') . '/' . $loteamento->link }}">{{ env('APP_URL') . '/' . $loteamento->link }}</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
 
-                <h4 class="p-2 mt-5">Dados do Loteamento</h4>
+                                        </tr>
+                                        <tr>
+                                            <td>Criado Em:</td>
+                                            <td>{{ date('H:i:s d/m/Y', strtotime($loteamento->created_at)) }}</td>
+                                        </tr>
 
-                <div class="table">
-                    <table class="___class_+?5___">
-                        <tr>
-                            <td>Nome:</td>
-                            <td>{{ $loteamento->nome }}</td>
-                        </tr>
-                        <tr>
-                            <td>Link:</td>
-                            <td><a
-                                    href="{{ env('APP_URL') . '/' . $loteamento->link }}">{{ env('APP_URL') . '/' . $loteamento->link }}</a>
-                            </td>
-                        </tr>
-                        <tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col col-12 col-lg-6">
+                                <h4 class="d-block"> Dados de Localização</h4>
 
-                        </tr>
-                        <tr>
-                            <td>Criado Em:</td>
-                            <td>{{ date('H:i:s d/m/Y', strtotime($loteamento->created_at)) }}</td>
-                        </tr>
+                                <div class="h-100 pb-5">
+                                    <div id="map" class=""></div>
 
-                    </table>
+                                    <form
+                                        action="{{ route('admin.loteamentos.updateLocation', ['loteamento' => $loteamento->id]) }}"
+                                        method="post" id="frmUpdateLocation">
+                                        @csrf
+                                        <input id="txtLatitude" name="latitude" type="text" style="display: none">
+                                        <input id="txtLongitude" name="longitude" type="text" style="display: none">
+                                        <input id="txtZoom" name="zoom" type="text" style="display: none">
+                                        <button class="btn btn-block btn-success" type="submit" id="btnSaveLocation"
+                                        style="display: none">Atualizar Dados
+                                        </button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-center mt-4">
-                    {{-- <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                    <a href="#" class="btn btn-sm btn-warning">Report contact</a> --}}
-                </div>
-
-            </div>
-            <div class="col-12 col-md-12 col-lg-5 order-1 order-md-2">
-
-                <h4 class="mt-5">Dados de localização</h4>
-
-                <div id="map"></div>
-
-                <form action="{{ route('loteamento.updateLocation', ['loteamento' => $loteamento]) }}" method="post"
-                    id="frmUpdateLocation">
-                    @csrf
-                    <input id="txtLatitude" name="latitude" type="text" style="display: none">
-                    <input id="txtLongitude" name="longitude" type="text" style="display: none">
-                    <input id="txtZoom" name="zoom" type="text" style="display: none">
-                    <button class="btn btn-success" type="submit" id="btnSaveLocation" style="display: none">Atualizar
-                        Dados</button>
-                </form>
             </div>
         </div>
-        <hr>
-        <div class="row">
+
+        {{-- Quadras --}}
+        <div class="row mt-4">
             <div class="col" id="lista_exibe">
 
                 <div class="card">
@@ -87,7 +93,7 @@
                         <div class="modal fade" id="modal-add-quadra" style="display: none;" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form method="POST" action="{{ route('quadra.store') }}">
+                                    <form method="POST" action="{{ route('admin.quadras.store') }}">
                                         @csrf
                                         <input type="hidden" name="loteamento_id" value="{{ $loteamento->id }}">
                                         <div class="modal-header">
@@ -105,7 +111,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer justify-content-between">
-                                            <button type="submit" class="btn btn-primary">Criar Quadra</button>
+                                            <button type="submit" class="btn btn-primary">Criar
+                                                Quadra</button>
                                         </div>
                                     </form>
                                 </div>
@@ -115,7 +122,11 @@
                         </div>
                         <div id="quadras" class="collapse show w-100" data-parent="#lista_exibe" style="">
                             <div class="card-body">
-
+                                @if(session("error_message_quadra"))
+                                    <div class="alert alert-danger">
+                                        {{session("error_message_quadra")}}
+                                    </div>
+                                @endif
                                 <table class="table">
                                     <thead>
                                         <th>#</th>
@@ -129,11 +140,12 @@
                                             <tr>
                                                 <td>{{ $quadra->id }}</td>
                                                 <td>{{ $quadra->descricao }}</td>
-                                                <td>{{ date('H:i:s d/m/Y', strtotime($quadra->created_at)) }}</td>
+                                                <td>{{ date('H:i:s d/m/Y', strtotime($quadra->created_at)) }}
+                                                </td>
                                                 <td>{{ $quadra->lotes()->count() }}</td>
                                                 <td>
                                                     <a class="btn btn-primary btn-sm"
-                                                        href="{{ route('quadra.show', ['quadra' => $quadra]) }}">
+                                                        href="{{ route('admin.quadras.show', ['quadra' => $quadra]) }}">
                                                         <i class="fas fa-eye">
                                                         </i>
                                                     </a>
@@ -143,7 +155,7 @@
                                                         Edit
                                                     </a> --}}
                                                     <a class="btn btn-danger btn-sm"
-                                                        href="{{ route('quadra.delete', ['quadra' => $quadra]) }}">
+                                                        href="{{ route('admin.quadras.delete', ['quadra' => $quadra]) }}">
                                                         <i class="fas fa-trash">
                                                         </i>
                                                     </a>
@@ -157,6 +169,8 @@
                 </div>
             </div>
         </div>
+
+        {{-- Landing Page --}}
         <div class="row">
             <div class="col" id="lista_images">
 
@@ -181,7 +195,7 @@
                         <div id="landing" class="collapse show w-100" data-parent="#lista_exibe" style="">
                             <div class="card-body">
                                 <form id="updateLandingPage" method='POST'
-                                    action="{{ route('loteamento.editLandingLayout', ['loteamento' => $loteamento]) }}">
+                                    action="{{ route('admin.loteamentos.editLandingLayout', ['loteamento' => $loteamento]) }}">
                                     @csrf
                                     <h2>Textos</h2>
 
@@ -228,7 +242,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <form method="POST" enctype="multipart/form-data"
-                                                        action="{{ route('loteamento.uploadFile', ['loteamento' => $loteamento]) }}"
+                                                        action="{{ route('admin.loteamentos.uploadFile', ['loteamento' => $loteamento]) }}"
                                                         id="formAddImage">
                                                         @csrf
                                                         <div class="modal-header">
@@ -257,6 +271,7 @@
                                                             <button type="submit" id="sendFile"
                                                                 class="btn btn-primary">Enviar</button>
                                                         </div>
+                                                    </form>
                                                 </div>
                                                 <!-- /.modal-content -->
                                             </div>
@@ -276,15 +291,18 @@
                                             <tr id="r-{{ $asset->id }}">
                                                 <td>
                                                     @if ($asset->type == 'I')
-                                                        <img src="{{ env("AWS_BASE") . $asset->filepath }}" class="img-list" style="max-width:300px"/>
+                                                        <img src="{{ env('AWS_BASE') . $asset->filepath }}"
+                                                            class="img-list" style="max-width:300px" />
                                                     @else
                                                         <video src="{{ $asset->filepath }}"
                                                             class="img-list"></video>
                                                     @endif
                                                 </td>
-                                                <td>{{ date('H:i:s d/m/Y', strtotime($asset->created_at)) }}</td>
+                                                <td>{{ date('H:i:s d/m/Y', strtotime($asset->created_at)) }}
+                                                </td>
                                                 <td>
-                                                    <a class="btn btn-danger btn-sm" data-delete="{{ $asset->id }}" href="{{route("asset.delete", [ 'asset' => $asset ])}}">
+                                                    <a class="btn btn-danger btn-sm" data-delete="{{ $asset->id }}"
+                                                        href="{{ route('asset.delete', ['asset' => $asset]) }}">
                                                         <i class="fas fa-trash">
                                                         </i>
                                                     </a>
@@ -303,6 +321,10 @@
         </div>
     </section>
 
+@endsection
+
+@section("js")
     <script src="{{ url('js/loteamentos/view.js') }}"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GCP_MAPS_API', '') }}&callback=initMap"></script>
-    @endsection
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GCP_MAPS_API', '') }}&callback=initMap">
+    </script>
+@endsection

@@ -39,5 +39,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ImobiliariaSeeder::class);
         $this->call(LoteamentoSeeder::class);
         $this->call(QuadraSeeder::class);
+        $this->call(AgendamentoSeeder::class);
     }
 }

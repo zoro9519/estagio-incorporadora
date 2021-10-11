@@ -1,46 +1,55 @@
 @extends("templates.admin")
 
 @section('content')
-    <section class="content">
+    <section class="content p-2">
 
         <div class="row">
-            <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+            <div class="col-12">
+                <div class="card">
 
-                <h4 class="p-2 mt-5">Dados da Imobiliária </h4>
+                    <div class="card-body">
 
-                <div class="table">
-                    <table class="">
-                        <tr>
-                            <td>Nome:</td>
-                            <td>{{ $imobiliaria->nome }}</td>
-                        </tr>
-                        <tr>
-                            <td>Razão Social:</td>
-                            <td>{{ $imobiliaria->razao_social }}</td>
-                        </tr>
-                        <tr>
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
 
-                        </tr>
-                        <tr>
-                            <td>Criado Em:</td>
-                            <td>{{ date('H:i:s d/m/Y', strtotime($imobiliaria->created_at)) }}</td>
-                        </tr>
+                                <h4 class="">Dados da Imobiliária </h4>
 
-                    </table>
+                                <div class="table">
+                                    <table class="">
+                                        <tr>
+                                            <td>Nome:</td>
+                                            <td>{{ $imobiliaria->nome }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Razão Social:</td>
+                                            <td>{{ $imobiliaria->razao_social }}</td>
+                                        </tr>
+                                        <tr>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Criado Em:</td>
+                                            <td>{{ date('H:i:s d/m/Y', strtotime($imobiliaria->created_at)) }}</td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                                <div class="text-center mt-4">
+                                    {{-- <a href="#" class="btn btn-sm btn-primary">Add files</a>
+                                    <a href="#" class="btn btn-sm btn-warning">Report contact</a> --}}
+                                </div>
+
+                            </div>
+                            <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+
+                                <h4 class="">Dados de localização</h4>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-center mt-4">
-                    {{-- <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                    <a href="#" class="btn btn-sm btn-warning">Report contact</a> --}}
-                </div>
-
-            </div>
-            <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-
-                <h4 class="mt-5">Dados de localização</h4>
-
             </div>
         </div>
-        <hr>
         <div class="row">
             <div class="col" id="lista_exibe">
 
@@ -66,7 +75,7 @@
                         <div class="modal fade" id="modal-add-corretor" style="display: none;" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
-                                  <form method="POST" action="{{route("corretor.store")}}">
+                                  <form method="POST" action="{{route("admin.corretores.store")}}">
                                     @csrf
                                     <input type="hidden" name="imobiliaria_id" value="{{ $imobiliaria->id }}">
                                     <div class="modal-header">
@@ -79,26 +88,26 @@
                                     
                                         <div class="form-group">
                                             <label>Nome:</label>
-                                            <input type="text" name="nome">
+                                            <input type="text" name="nome" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label>Documento:</label>
-                                            <input type="text" name="documento">
+                                            <input type="text" name="documento" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label>Celular:</label>
-                                            <input type="text" name="celular">
+                                            <input type="text" name="celular" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label>Taxa em % para vendas:</label>
-                                            <input type="text" name="taxa_venda_porcentagem">
+                                            <input type="text" class="form-control" name="taxa_venda_porcentagem">
                                         </div>
                                         <div class="form-group">
                                             <label>Taxa em R$ para vendas:</label>
-                                            <input type="text" name="taxa_venda_valor">
+                                            <input type="text" name="taxa_venda_valor" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="modal-footer justify-content-between">
+                                    <div class="modal-footer text-right">
                                         <button type="submit" class="btn btn-primary">Criar Corretor</button>
                                     </div>
                               </div>
@@ -126,7 +135,7 @@
                                                 <td>{{ $corretor->vendas()->count() }}</td>
                                                 <td>
                                                     <a class="btn btn-primary btn-sm"
-                                                        href="{{ route('corretor.show', ['corretor' => $corretor]) }}">
+                                                        href="{{ route('admin.corretores.show', ['corretor' => $corretor]) }}">
                                                         <i class="fas fa-eye">
                                                         </i>
                                                     </a>
@@ -135,7 +144,7 @@
                                                         </i>
                                                         Edit
                                                     </a> --}}
-                                                    <a class="btn btn-danger btn-sm" href="{{ route("corretor.delete", [ 'corretor' => $corretor]) }}">
+                                                    <a class="btn btn-danger btn-sm" href="{{ route("admin.corretores.delete", [ 'corretor' => $corretor]) }}">
                                                         <i class="fas fa-trash">
                                                         </i>
                                                     </a>

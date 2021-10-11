@@ -13,6 +13,6 @@ class AgendamentoSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\Agendamento::factory(3)->create();
     }
 }

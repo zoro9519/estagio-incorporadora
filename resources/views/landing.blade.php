@@ -11,6 +11,7 @@
     <script>
         var LatLanding = {{ $loteamento->coordenada->latitude ?? env('GCP_DEFAULT_LAT') }};
         var LongLanding = {{ $loteamento->coordenada->longitude ?? env('GCP_DEFAULT_LONG') }};
+        var ZoomCoord = {{ $loteamento->coordenada->zoom ?? env('GCP_DEFAULT_ZOOM') }};
     </script>
 
     <div class="row">

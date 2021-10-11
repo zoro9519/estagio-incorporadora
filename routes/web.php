@@ -23,6 +23,11 @@ Route::get('/', function () {
 });
 
 
+        /**
+         *          ROTAS
+         * 
+         *          ADMIN
+         */
 // Admin
 Route::prefix("admin")->group(function(){
 
@@ -31,7 +36,7 @@ Route::prefix("admin")->group(function(){
         Route::get("/", [\App\Http\Controllers\Admin\AuthController::class, "index"])->name("admin.auth");
         Route::get("remember", [\App\Http\Controllers\Admin\AuthController::class, "remember"])->name("admin.auth.remember");
         Route::post("login", [\App\Http\Controllers\Admin\AuthController::class, "login"])->name("admin.auth.login");
-        Route::post("register", [\App\Http\Controllers\Admin\AuthController::class, "register"])->name("admin.auth.register");
+        Route::post("store", [\App\Http\Controllers\Admin\AuthController::class, "store"])->name("admin.auth.store");
         Route::post("forgot", [\App\Http\Controllers\Admin\AuthController::class, "forgot"])->name("admin.auth.forgot");
         Route::post("reset", [\App\Http\Controllers\Admin\AuthController::class, "reset"])->name("admin.auth.reset");
     });
@@ -44,37 +49,30 @@ Route::middleware('auth:admin')->group(function () {
     
         // Admin / Loteamentos
         Route::prefix("loteamentos")->group(function() {
-            Route::get("/", [\App\Http\Controllers\Admin\LoteamentoController::class, 'all'])->name("loteamento.all");
-            Route::get("{loteamento}", [\App\Http\Controllers\Admin\LoteamentoController::class, 'show'])->name("loteamento.show");
-            Route::post("store", [\App\Http\Controllers\Admin\LoteamentoController::class, 'store'])->name("loteamento.store");
+            Route::get("/", [\App\Http\Controllers\Admin\LoteamentoController::class, 'all'])->name("admin.loteamentos.all");
+            Route::get("{loteamento}", [\App\Http\Controllers\Admin\LoteamentoController::class, 'show'])->name("admin.loteamentos.show");
+            Route::post("store", [\App\Http\Controllers\Admin\LoteamentoController::class, 'store'])->name("admin.loteamentos.store");
 
-            Route::post("{loteamento}/updateLocation", [\App\Http\Controllers\Admin\LoteamentoController::class, 'updateLocation'])->name("loteamento.updateLocation");
+            Route::post("{loteamento}/updateLocation", [\App\Http\Controllers\Admin\LoteamentoController::class, 'updateLocation'])->name("admin.loteamentos.updateLocation");
 
-            Route::post("{loteamento}/landing/update", [\App\Http\Controllers\Admin\LoteamentoController::class, 'updateLandingPage'])->name("loteamento.editLandingLayout");
-            Route::post("{loteamento}/landing/uploadFile", [\App\Http\Controllers\Admin\LoteamentoController::class, 'uploadFile'])->name("loteamento.uploadFile");
-            Route::get("{loteamento}/landing/uploadFile", [\App\Http\Controllers\Admin\LoteamentoController::class, 'uploadFile'])->name("loteamento.uploadFile");
+            Route::post("{loteamento}/landing/update", [\App\Http\Controllers\Admin\LoteamentoController::class, 'updateLandingPage'])->name("admin.loteamentos.editLandingLayout");
+            Route::post("{loteamento}/landing/uploadFile", [\App\Http\Controllers\Admin\LoteamentoController::class, 'uploadFile'])->name("admin.loteamentos.uploadFile");
+            Route::get("{loteamento}/landing/uploadFile", [\App\Http\Controllers\Admin\LoteamentoController::class, 'uploadFile'])->name("admin.loteamentos.uploadFile");
             
-
-            Route::post("/favorite/{product}", [ProductController::class, 'setFavorite']);
-    
-            Route::get("/actives", [ProductController::class, 'actives']);
-            Route::post("/active/{product}", [ProductController::class, 'setActive']);
         });
 
         // Admin / Quadras
         Route::prefix("quadras")->group(function() {
 
             // Embutida em loteamento.show
-            // Route::get("/", [\App\Http\Controllers\Admin\QuadraController::class, 'all'])->name("quadra.all");
+            // Route::get("/", [\App\Http\Controllers\Admin\QuadraController::class, 'all'])->name("admin.quadras.all");
 
-            Route::get("{quadra}", [\App\Http\Controllers\Admin\QuadraController::class, 'show'])->name("quadra.show");
+            Route::get("{quadra}", [\App\Http\Controllers\Admin\QuadraController::class, 'show'])->name("admin.quadras.show");
 
-            Route::post("/store", [\App\Http\Controllers\Admin\QuadraController::class, 'store'])->name("quadra.store");;
+            Route::post("/store", [\App\Http\Controllers\Admin\QuadraController::class, 'store'])->name("admin.quadras.store");;
 
-            Route::get("/delete/{quadra}", [\App\Http\Controllers\Admin\QuadraController::class, 'destroy'])->name("quadra.delete");
+            Route::get("/delete/{quadra}", [\App\Http\Controllers\Admin\QuadraController::class, 'destroy'])->name("admin.quadras.delete");
 
-            Route::get("/actives", [ProductController::class, 'actives']);
-            Route::post("/active/{product}", [ProductController::class, 'setActive']);
         });
 
         // Admin / Lotes
@@ -83,28 +81,28 @@ Route::middleware('auth:admin')->group(function () {
             // Embutida em loteamento.show
             // Route::get("/", [\App\Http\Controllers\Admin\QuadraController::class, 'all'])->name("quadra.all");
 
-            Route::get("{lote}", [\App\Http\Controllers\Admin\LoteController::class, 'show'])->name("lote.show");
+            Route::get("{lote}", [\App\Http\Controllers\Admin\LoteController::class, 'show'])->name("admin.lotes.show");
 
-            Route::post("store", [\App\Http\Controllers\Admin\LoteController::class, 'store'])->name("lote.store");
+            Route::post("store", [\App\Http\Controllers\Admin\LoteController::class, 'store'])->name("admin.lotes.store");
+
+            Route::post("vender/{lote}", [\App\Http\Controllers\Admin\LoteController::class, 'vender'])->name("admin.lotes.vender");
             
-            Route::get("/delete/{lote}", [\App\Http\Controllers\Admin\LoteController::class, 'destroy'])->name("lote.delete");
+            Route::get("/delete/{lote}", [\App\Http\Controllers\Admin\LoteController::class, 'destroy'])->name("admin.lotes.delete");
 
-            Route::post("{lote}/adicionar_proprietario", [\App\Http\Controllers\Admin\LoteController::class, 'adicionarProprietario'])->name("lote.adicionar_proprietario");
+            Route::post("{lote}/adicionar_proprietario", [\App\Http\Controllers\Admin\LoteController::class, 'adicionarProprietario'])->name("admin.lotes.adicionar_proprietario");
     
-            Route::get("/actives", [ProductController::class, 'actives']);
-            Route::post("/active/{product}", [ProductController::class, 'setActive']);
         });
 
         // Admin / Proprietarios
         Route::prefix("proprietarios")->group(function() {
 
-            Route::get("/lote/{lote}", [\App\Http\Controllers\Admin\ProprietarioController::class, 'show'])->name("proprietario.byLote");
-            Route::get("{proprietario}", [\App\Http\Controllers\Admin\ProprietarioController::class, 'show'])->name("proprietario.show");
+            Route::get("/lote/{lote}", [\App\Http\Controllers\Admin\ProprietarioController::class, 'show'])->name("admin.proprietarios.byLote");
+            Route::get("{proprietario}", [\App\Http\Controllers\Admin\ProprietarioController::class, 'show'])->name("admin.proprietarios.show");
 
-            // Route::post("store", [\App\Http\Controllers\Admin\ProprietarioController::class, 'store'])->name("proprietario.store");
+            // Route::post("store", [\App\Http\Controllers\Admin\ProprietarioController::class, 'store'])->name("admin.proprietarios.store");
             
-            Route::get("/delete/{proprietario}", [\App\Http\Controllers\Admin\LoteController::class, 'removerProprietario'])->name("proprietario.remove");
-            Route::post("{lote}/adicionar_proprietario", [\App\Http\Controllers\Admin\LoteController::class, 'adicionarProprietario'])->name("lote.adicionar_proprietario");
+            Route::get("/delete/{proprietario}", [\App\Http\Controllers\Admin\LoteController::class, 'removerProprietario'])->name("admin.proprietarios.remove");
+            Route::post("{lote}/adicionar_proprietario", [\App\Http\Controllers\Admin\LoteController::class, 'adicionarProprietario'])->name("admin.lotes.adicionar_proprietario");
         });
 
         Route::prefix("assets")->group(function(){
@@ -113,11 +111,11 @@ Route::middleware('auth:admin')->group(function () {
 
         // Admin / Imobiliarias
         Route::prefix("imobiliarias")->group(function() {
-            Route::get("/", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'all'])->name("imobiliaria.all");
-            Route::get("{imobiliaria}", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'show'])->name("imobiliaria.show");
-            Route::post("store", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'store'])->name("imobiliaria.store");
+            Route::get("/", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'all'])->name("admin.imobiliarias.all");
+            Route::get("{imobiliaria}", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'show'])->name("admin.imobiliarias.show");
+            Route::post("store", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'store'])->name("admin.imobiliarias.store");
 
-            Route::get("/delete/{imobiliaria}", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'destroy'])->name("imobiliaria.delete");
+            Route::get("/delete/{imobiliaria}", [\App\Http\Controllers\Admin\ImobiliariaController::class, 'destroy'])->name("admin.imobiliarias.delete");
             // Route::post("/favorite/{product}", [ProductController::class, 'setFavorite']);
     
             // Route::get("/actives", [ProductController::class, 'actives']);
@@ -129,38 +127,37 @@ Route::middleware('auth:admin')->group(function () {
 
         // Admin / Corretores
         Route::prefix("corretores")->group(function() {
-            Route::get("/", [\App\Http\Controllers\Admin\CorretorController::class, 'all'])->name("corretor.all");
-            Route::get("{corretor}", [\App\Http\Controllers\Admin\CorretorController::class, 'show'])->name("corretor.show");
-            Route::post("store", [\App\Http\Controllers\Admin\CorretorController::class, 'store'])->name("corretor.store");
-            Route::get("/delete/{corretor}", [\App\Http\Controllers\Admin\CorretorController::class, 'destroy'])->name("corretor.delete");
+            Route::get("/", [\App\Http\Controllers\Admin\CorretorController::class, 'all'])->name("admin.corretores.all");
+            Route::get("{corretor}", [\App\Http\Controllers\Admin\CorretorController::class, 'show'])->name("admin.corretores.show");
+            Route::post("store", [\App\Http\Controllers\Admin\CorretorController::class, 'store'])->name("admin.corretores.store");
+            Route::get("/delete/{corretor}", [\App\Http\Controllers\Admin\CorretorController::class, 'destroy'])->name("admin.corretores.delete");
         });
         // Route::prefix("corretores")->group(function() {
         //     Route::get("/", [CorretorController::class, "all"])->name("corretor.all");
         // });
 
-        Route::resource('products', ProductController::class, [
-            'except' => ['edit', 'show', 'store', 'create', 'update', 'destroy']
-        ]);
     
         // Handle user notifications
         Route::prefix("users")->group(function() {
-            Route::get("/", [App\Http\Controllers\Admin\UserController::class, "all"])->name("user.all");
-            Route::get("{user}", [App\Http\Controllers\Admin\UserController::class, "show"])->name("user.show");
+            Route::get("/", [App\Http\Controllers\Admin\UserController::class, "all"])->name("admin.users.all");
+            Route::get("{user}", [App\Http\Controllers\Admin\UserController::class, "show"])->name("admin.users.show");
+            Route::get("aprovar/{user}", [App\Http\Controllers\Admin\UserController::class, "aprovar"])->name("admin.users.aprovar");
         });
+
         Route::prefix("agendamentos")->group(function() {
-            Route::get("/", [App\Http\Controllers\Admin\AgendamentoController::class, "all"])->name("agendamento.all");
+            Route::get("/", [App\Http\Controllers\Admin\AgendamentoController::class, "all"])->name("admin.agendamentos.all");
+            Route::get("{agendamento}", [App\Http\Controllers\Admin\AgendamentoController::class, "show"])->name("admin.agendamentos.show");
+            Route::post("/", [App\Http\Controllers\Admin\AgendamentoController::class, "all"])->name("admin.agendamentos.all");
+            Route::post("/{agendamento}/changeStatus", [App\Http\Controllers\Admin\AgendamentoController::class, "changeStatus"])->name("admin.agendamentos.changeStatus");
+            Route::post("/{agendamento}/setCorretor/{id_corretor}", [App\Http\Controllers\Admin\AgendamentoController::class, "setCorretor"])->name("admin.agendamentos.setCorretor");
+            Route::post("update/{agendamento}", [App\Http\Controllers\Admin\AgendamentoController::class, "update"])->name("admin.agendamentos.update");
         });
+
         Route::prefix("vendas")->group(function() {
-            Route::get("/", [App\Http\Controllers\Admin\VendaController::class, "all"])->name("venda.all");
+            Route::get("/", [App\Http\Controllers\Admin\VendaController::class, "all"])->name("admin.vendas.all");
+            Route::get("{venda}", [App\Http\Controllers\Admin\VendaController::class, "show"])->name("admin.vendas.show");
         });
         
-        
-
-
-        Route::resource('notifications', NotificationController::class, [
-            'except' => ['create', 'destroy', 'store']
-        ]);
-    
     });
 
 });
@@ -243,15 +240,22 @@ Route::prefix("user")->group(function(){
 
     // Auth is not mandatory
     // Category
-    Route::get('/categories', [CategoryController::class,'index']);
+    // Route::get('/categories', [CategoryController::class,'index']);
     
     // Product
-    Route::get('/products', [ProductController::class,'index']);
+    // Route::get('/products', [ProductController::class,'index']);
     
     // Plan
-    Route::get('/plans', [PlanController::class,'index']);
+    // Route::get('/plans', [PlanController::class,'index']);
     
 });
+
+
+// Rotas úteis para API pública
+// Search user
+Route::post("users/search", [\App\Http\Controllers\UserController::class, 'search']);
+Route::get("corretores/{imobiliaria_id?}", [\App\Http\Controllers\CorretorController::class, 'index']);
+
 
 Route::any('{loteamento:link}', [\App\Http\Controllers\LoteamentoController::class, 'show'])->name("landing.view");
 Route::post('{loteamento:link}/save', [\App\Http\Controllers\NewsletterMemberController::class, 'registerMember'])->name("landing.save");

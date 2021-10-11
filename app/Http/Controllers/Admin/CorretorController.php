@@ -21,7 +21,7 @@ class CorretorController extends Controller
 
     public function all()
     {
-        $corretores = Corretor::get()->all();
+        $corretores = Corretor::doesntHave('imobiliaria')->get();
         return view("admin.corretores.index")->with("corretores", $corretores);
     }
 

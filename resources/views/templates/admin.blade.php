@@ -22,6 +22,7 @@
     <style>
         #map {
             height: 100%;
+            min-height: 25em;
         }
 
         html,
@@ -228,7 +229,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route("user.all") }}" class="nav-link">
+                            <a href="{{ route("admin.users.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>
                                     Clientes
@@ -236,7 +237,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route("agendamento.all") }}" class="nav-link">
+                            <a href="{{ route("admin.agendamentos.all") }}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
                                     Agendamentos
@@ -244,7 +245,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route("venda.all") }}" class="nav-link">
+                            <a href="{{ route("admin.vendas.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-dollar-sign"></i>
                                 <p>
                                     Vendas
@@ -252,7 +253,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route("loteamento.all") }}" class="nav-link">
+                            <a href="{{ route("admin.loteamentos.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-map-marker-alt"></i>
                                 <p>
                                     Loteamentos
@@ -260,7 +261,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route("imobiliaria.all") }}" class="nav-link">
+                            <a href="{{ route("admin.imobiliarias.all") }}" class="nav-link">
                                 <i class="nav-icon far fa-building"></i>
                                 <p>
                                     Imobiliárias
@@ -268,7 +269,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route("corretor.all") }}" class="nav-link">
+                            <a href="{{ route("admin.corretores.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-user-tie"></i>
                                 <p>
                                     Corretores
@@ -371,6 +372,8 @@
     {{-- <script src="{{ url("template/assets/js/adminlte.js") }}"></script> --}}
     <!-- AdminLTE for demo purposes -->
     {{-- <script src="{{ url("template/assets/js/demo.js") }}"></script> --}}
+    {{-- <script src="{{ url("template/inputmask.js") }}"></script> --}}
+    <script src="{{ url("js/main.js") }}"></script>
     @yield("js")
 </body>
 

@@ -48,4 +48,8 @@ class User extends Authenticatable
     public function loteamentosDeInteresse(){
         return $this->belongsToMany(Loteamento::class, "newsletter_loteamento_users", "user_id", "loteamento_id");
     }
+
+    public function agendamentos(){
+        return $this->hasMany(Agendamento::class);
+    }
 }
