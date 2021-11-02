@@ -2,6 +2,8 @@ FROM composer:1.9.0 as build
 WORKDIR /app
 COPY composer.json composer.json
 COPY composer.lock composer.lock
+COPY artisan artisan
+COPY artisan /app/artisan
 
 RUN composer update
 RUN composer install \
