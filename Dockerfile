@@ -3,7 +3,7 @@ WORKDIR /app
 COPY composer.json composer.json
 COPY composer.lock composer.lock
 COPY artisan artisan
-COPY artisan /app/artisan
+COPY . .
 
 RUN composer update
 RUN composer install \
@@ -13,7 +13,7 @@ RUN composer install \
     --no-dev \
     --prefer-dist
 
-COPY . .
+
 
 FROM php:7.4-apache-stretch
 RUN docker-php-ext-install pdo pdo_mysql
