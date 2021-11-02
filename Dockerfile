@@ -3,6 +3,7 @@ WORKDIR /app
 COPY composer.json composer.json
 COPY composer.lock composer.lock
 
+RUN composer update
 RUN composer install \
     --no-interaction \
     --no-plugins \
