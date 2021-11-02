@@ -1,7 +1,16 @@
 FROM composer:1.9.0 as build
 WORKDIR /app
-COPY . /app
-RUN composer install
+COPY composer.json composer.json
+COPY composer.lock composer.lock
+
+RUN composer install \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --no-dev \
+    --prefer-dist
+
+COPY . .
 
 FROM php:7.4-apache-stretch
 RUN docker-php-ext-install pdo pdo_mysql
