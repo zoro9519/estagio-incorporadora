@@ -229,6 +229,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Lote' => App\Models\Lote::class,
+        'Agendamento' => App\Models\Agendamento::class,
+        'User' => App\Models\User::class,
+        'Venda' => App\Models\Venda::class,
 
     ],
 

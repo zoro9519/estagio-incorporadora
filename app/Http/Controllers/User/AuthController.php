@@ -61,16 +61,31 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        if (!Auth::attempt($request->only(['email', 'password']))) {
-            return ResponseHelper::error(__("Credenciais inválidas"), Response::HTTP_UNAUTHORIZED);
+        
+        if (!Auth::guard("web")->attempt($request->only(['email', 'password']))) {
+            // return ResponseHelper::error(__("Credenciais inválidas"), Response::HTTP_UNAUTHORIZED);
+            return redirect()->route("user.auth")->with('error', __("Credenciais inválidas"));
         }
 
         $user = Auth::user();
 
-        $token = $user->createToken('token')->plainTextToken;
-        $cookie = cookie("jwt", $token, 60 * 24); //1 dia
+        // $token = $user->createToken('token')->plainTextToken;
+        // $cookie = cookie("jwt", $token, 60 * 24); //1 dia
 
-        return ResponseHelper::success($user, __('Sucesso'))->withCookie($cookie);
+        // return ResponseHelper::success($user, __('Sucesso'));//->withCookie($cookie);
+
+        return redirect()->route("user.home");
+        
+        // if (!Auth::attempt($request->only(['email', 'password']))) {
+        //     return ResponseHelper::error(__("Credenciais inválidas"), Response::HTTP_UNAUTHORIZED);
+        // }
+
+        // $user = Auth::user();
+
+        // $token = $user->createToken('token')->plainTextToken;
+        // $cookie = cookie("jwt", $token, 60 * 24); //1 dia
+
+        // return ResponseHelper::success($user, __('Sucesso'))->withCookie($cookie);
     }
 
     public function user()
@@ -131,7 +146,12 @@ class AuthController extends Controller
             return ResponseHelper::error(__("Faça logout antes de realizar essa operação"), 403);
         }
 
-        $cookie = Cookie::forget("jwt");
-        return ResponseHelper::success([], __("Logout feito com sucesso"))->withCookie($cookie);
+        // $cookie = Cookie::forget("jwt");
+        // return ResponseHelper::success([], __("Logout feito com sucesso")); //->withCookie($cookie);
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route("user.auth");
     }
 }

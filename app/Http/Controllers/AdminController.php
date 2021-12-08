@@ -16,10 +16,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $contas_pendentes = User::where("status", 'A')->count();
-        $agendamentos_pendentes = Agendamento::where("status", 'E')->count();
-
-        return view("admin.index")->with("contas_pendentes", $contas_pendentes)->with("agendamentos_pendentes", $agendamentos_pendentes);
+        return view("admin.index");
     }
 
     /**

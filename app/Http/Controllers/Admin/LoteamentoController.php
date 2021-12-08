@@ -76,7 +76,6 @@ class LoteamentoController extends Controller
             $loteamento->descricao = $data['descricao'];
             $loteamento->link = $data['link'];
             $loteamento->area = $data['area'];
-            $loteamento->coordenada_id = 0;
 
             $loteamento->save();
 
@@ -110,7 +109,7 @@ class LoteamentoController extends Controller
      */
     public function edit(Loteamento $loteamento)
     {
-        //
+        return view("admin.loteamentos.edit")->with('loteamento', $loteamento);
     }
 
     /**
@@ -122,7 +121,34 @@ class LoteamentoController extends Controller
      */
     public function update(Request $request, Loteamento $loteamento)
     {
-        //
+        $return = [
+            'success' => false,
+            'message' => []
+        ];
+        
+        $data = $request->all();
+
+        if(empty($data['nome']))
+            $return['message'][] = "Nome precisa ser preenchido";
+        elseif(empty($data['link']))
+            $return['message'][] = "Link precisa ser preenchido";
+        elseif(Loteamento::where("link", $data['link'])->where('id', '!=', $loteamento->id)->count())
+            $return['message'][] = 'Link já cadastrado na base';
+        elseif(empty($data['area']))
+            $return['message'][] = "Área precisa ser preenchida";
+        else {
+            $loteamento->nome = $data['nome'];
+            $loteamento->link = $data['link'];
+            $loteamento->area = $data['area'];
+            $loteamento->save();
+
+            $return['success'] = true;
+            $return['message'][] = 'Loteamento atualizado com sucesso';
+        }
+
+        $return['message'] = implode("<br>", $return['message']);
+
+        return redirect("admin/loteamentos/{$loteamento->id}")->with("return", $return);
     }
 
     /**
@@ -136,17 +162,25 @@ class LoteamentoController extends Controller
         //
     }
 
-    public function updateLandingPage(Loteamento $loteamento, Request $request){
+    public function updateLandingPage(Loteamento $loteamento, Request $request)
+    {
+        $return = [
+            'success' => false,
+            'message' => []
+        ];
 
-        $validator = Validator::make($request->all(), [
-            'descricao' => "required|min:1"
-        ])->validate();
+        // $validator = Validator::make($request->all(), [
+        //     'descricao' => "required|min:1"
+        // ])->validate();
 
         $data = $request->all();
 
         $landing = new LandingPage();
 
         $landing->descricao = $data['descricao'];
+        $landing->texto_acompanhe_a_obra = $data['texto_acompanhe_a_obra'];
+        $landing->percentual_acompanhe_a_obra = $data['percentual_conclusao'];
+        $landing->endereco_completo = $data['endereco_completo'];
         $landing->cor_fundo = $data['cor_fundo'];
         $landing->cor_texto = $data['cor_texto'];
         $landing->loteamento_id = $loteamento->id;
@@ -155,11 +189,20 @@ class LoteamentoController extends Controller
             'loteamento_id' => $landing->loteamento_id
         ], [
             'descricao' => $landing->descricao,
+            'texto_acompanhe_a_obra' => $landing->texto_acompanhe_a_obra,
+            'percentual_acompanhe_a_obra' => $landing->percentual_acompanhe_a_obra,
+            'endereco_completo' => $landing->endereco_completo,
             'cor_fundo' => $landing->cor_fundo,
             'cor_texto' => $landing->cor_texto,
         ]);
+        $return['success'] = true;
+        $return['message'][] = 'Dados salvos com sucesso';
+
+        $return['message'] = implode("<br>", $return['message']);
         
-        return redirect()->back()->withErrors($validator, 'landing_layout');
+        return redirect("admin/loteamentos/{$loteamento->id}")
+        // ->withErrors($validator, 'landing_layout')
+        ->with('return', $return);
     }
 
     public function uploadFile(Loteamento $loteamento, Request $request){

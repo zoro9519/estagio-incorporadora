@@ -33,7 +33,7 @@
 
                             <div class="form-group">
                                 <label>Nome:</label>
-                                <input type="text" name="nome" class="form-control">
+                                <input type="text" name="nome" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Link:</label>
@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Descrição:</label>
-                                <input type="text" name="descricao" class="form-control">
+                                <input type="text" name="descricao" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Área:</label>
@@ -57,7 +57,7 @@
             <!-- /.modal-dialog -->
         </div>
 
-        <div class="card-body p-0">
+        <div class="card-body overflow-auto">
             <table class="table table-striped projects">
                 <thead>
                     <tr>
@@ -124,13 +124,13 @@
                             <td class="project-actions text-center">
                                 <a class="btn btn-primary btn-sm"
                                     href="{{ route('admin.loteamentos.show', ['loteamento' => $loteamento]) }}">
-                                    <i class="fas fa-folder"></i> View
+                                    <i class="fas fa-eye"></i> Ver
                                 </a>
-                                {{-- <a class="btn btn-info btn-sm" href="#">
+                                <a class="btn btn-info btn-sm" href="{{route('admin.loteamentos.edit', ['loteamento' => $loteamento->id])}}">
                                         <i class="fas fa-pencil-alt">
                                         </i>
-                                        Edit
-                                    </a> --}}
+                                        Editar
+                                    </a>
                                 {{-- <a class="btn btn-danger btn-sm" href="#">
                                     <i class="fas fa-trash"></i> Delete
                                 </a> --}}

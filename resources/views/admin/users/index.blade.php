@@ -2,11 +2,25 @@
 
 @section('page_title')Clientes
 @endsection
+
+{{-- @section('breadcrumb')
+
+@endsection --}}
+
 @section('content')
     <section class="content p-2">
         <div class="container-fluid">
         <!-- Default box -->
         <div class="row">
+
+            @if(session('return'))
+            <div class="col-12">
+                <div class="alert alert-{{session('return')['success'] ? 'success' : 'warning'}}">
+                    {{ session('return')['message'] }}
+                </div>
+            </div>
+            @endif
+
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -33,18 +47,20 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="text" name="filterEmail" class="form-control">
+                                        <input type="text" name="filterEmail" class="form-control" value='{{ Request::get('filterEmail') ?? '' }}'>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label>Situação</label>
                                         <select name="filterStatus" class="form-control">
-                                            <option>Selecione</option>
-                                            <option value="A">Aguardando Aprovação</option>
-                                            <option value="V">Aprovado</option>
-                                            <option value="E">Recusado</option>
-                                            {{-- <option>Recusado</option> --}}
+                                            <option value="">Selecione</option>
+                                            <option value="{{User::STATUS_EMESPERA}}"
+                                                    {{ Request::get('filterStatus') == User::STATUS_EMESPERA ? 'selected' : '' }}>{{$user_status[User::STATUS_EMESPERA]}}</option>
+                                            <option value="{{User::STATUS_APROVADO}}"
+                                                    {{ Request::get('filterStatus') == User::STATUS_APROVADO ? 'selected' : '' }}>{{$user_status[User::STATUS_APROVADO]}}</option>
+                                            <option value="{{User::STATUS_RECUSADO}}"
+                                                    {{ Request::get('filterStatus') == User::STATUS_RECUSADO ? 'selected' : '' }}>{{$user_status[User::STATUS_RECUSADO]}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -98,7 +114,7 @@
                                             </a>
                                             <br />
                                             <small>
-                                                Criado em: {{ date('d/m/Y', strtotime($user->created_at)) }}
+                                                Criado em: {{ date('d/m/Y H:i:s', strtotime($user->created_at)) }}
                                             </small>
                                         </td>
                                         <td>
@@ -108,24 +124,30 @@
                                             {{ $user_status[$user->status] }}
                                         </td>
                                         <td class="text-center">
-
+                                            {{-- Aplicar lista (array_map ????) --}}
                                             {{ $user->loteamentosDeInteresse()->first()->nome ?? '' }}
                                         </td>
                                         <td class="project-actions text-center">
                                             <a class="btn btn-primary btn-sm"
                                                 href="{{ route('admin.users.show', ['user' => $user]) }}">
-                                                <i class="fas fa-folder"></i> View
+                                                <i class="fas fa-eye"></i> Ver
                                             </a>
-                                            <a class="btn btn-warning btn-sm" href="#">
-                                                <i class="fas fa-wrench"></i> Editar
+                                            <a class="btn btn-info btn-sm" href="{{route("admin.users.edit", ["user" => $user->id])}}">
+                                                <i class="fas fa-pencil-alt"></i> Editar
                                             </a>
                                             {{-- Status de aguardando aprovação (precisa ser aprovado) --}}
-                                            @if ($user->status == 'A')
+                                            @if ($user->status == User::STATUS_EMESPERA)
                                                 <a class="btn btn-success btn-sm"
                                                     href="{{ route('admin.users.aprovar', [
                                                         'user' => $user,
                                                     ]) }}">
-                                                    <i class="fas fa-check"></i> Aprovar conta
+                                                    <i class="fas fa-check"></i> Aprovar
+                                                </a>
+                                                <a class="btn btn-danger btn-sm"
+                                                    href="{{ route('admin.users.recusar', [
+                                                        'user' => $user,
+                                                    ]) }}">
+                                                    <i class="fas fa-times"></i> Recusar
                                                 </a>
 
                                             @endif

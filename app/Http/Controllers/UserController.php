@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Loteamento;
 use App\Models\User;
+use App\Models\Lote;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {
@@ -16,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $loteamentos = Loteamento::all();
+        $loteamentos = Loteamento::disponiveis()->get();
         return view("user.index")->with("loteamentos", $loteamentos);
     }
 

@@ -21,6 +21,7 @@ class CreateImobiliariasTable extends Migration
             $table->string("cnpj", 18);
             $table->string("creci", 18);
             $table->string("email", 100);
+            $table->string("phone", 20);
             $table->boolean("status");
 
             // Endereco

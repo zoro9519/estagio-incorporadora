@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Corretor;
 use App\Models\Imobiliaria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CorretorController extends Controller
 {
@@ -50,7 +51,7 @@ class CorretorController extends Controller
 
         $request->validate([
             'nome' => 'required',
-            'documento'     => 'required',
+            'cpf'     => 'required',
             'celular'     => 'required'
         ]);
 
@@ -62,20 +63,33 @@ class CorretorController extends Controller
             $imobiliaria_id = 0;
         }
 
-        $corretorSearch = Corretor::where("documento", $data['documento'])->first();
+        $profilePicture = $request->file("profile_picture");
+
+        $corretorSearch = Corretor::where("cpf", $data['cpf'])
+            ->where("imobiliaria_id", "!=", $imobiliaria_id ? $imobiliaria_id : null)
+            ->first();
 
         if($corretorSearch){
-            $return['message'] = "Documento já cadastrado";
-        } else{
+            $return['message'] = "CPF já cadastrado";
+        } elseif(!$profilePicture){
+            $return['message'] = "Foto de perfil não enviada";
+        } elseif(!$profilePicture->getSize()){
+            $return['message'] = "Foto de perfil inválida";
+        } else {
+
+            $AWSFile = $profilePicture->storePublicly("corretors", 's3');
 
             $corretor = new Corretor();
 
             $corretor->nome = $data['nome'];
-            $corretor->documento = $data['documento'];
+            $corretor->cpf = $data['cpf'];
             $corretor->taxa_venda_porcentagem = $data['taxa_venda_porcentagem'] ?? 0;
             $corretor->taxa_venda_valor = $data['taxa_venda_valor'] ?? 0;
-            $corretor->celular = $data['celular'];
+            $corretor->phone = $data['celular'];
+            $corretor->email = $data['email'];
+
             $corretor->imobiliaria_id = $imobiliaria_id;
+            $corretor->profile_picture = $AWSFile;
 
             $corretor->ativo = true;
 
@@ -89,7 +103,10 @@ class CorretorController extends Controller
         if($imobiliaria_id != 0)
             $redirect = "admin/imobiliarias/{$imobiliaria_id}";
 
-        return redirect($redirect);
+        if($return['success']){
+            return redirect($redirect);
+        }
+        return back()->withInput()->with("error", $return['message']);
     }
 
     /**
@@ -111,7 +128,7 @@ class CorretorController extends Controller
      */
     public function edit(Corretor $corretor)
     {
-        //
+        return view('admin.corretores.edit')->with("corretor", $corretor);
     }
 
     /**
@@ -123,7 +140,60 @@ class CorretorController extends Controller
      */
     public function update(Request $request, Corretor $corretor)
     {
-        //
+        $return = [
+            'success' => false,
+            'message' => []
+        ];
+        
+        $data = $request->all();
+        $taxaPercent = $data['taxa_percent'];
+        $taxaValor = $data['taxa_valor'];
+        $fotoPerfil = $request->file('profile');
+
+        if(empty($data['nome']))
+            $return['message'][] = "Nome precisa ser preenchido";
+        elseif(empty($data['cpf']))
+            $return['message'][] = "CPF precisa ser preenchido";
+        elseif(Corretor::where("cpf", $data['cpf'])->where('id', '!=', $corretor->id)->count())
+            $return['message'][] = 'CPF já cadastrado na base';
+        elseif(empty($data['phone']))
+            $return['message'][] = "Celular precisa ser preenchido";
+        elseif(empty($data['email']))
+            $return['message'][] = "Email precisa ser preenchido";
+        elseif(Corretor::where("email", $data['email'])->where('id', '!=', $corretor->id)->count())
+            $return['message'][] = 'Email já cadastrado na base';
+        elseif($fotoPerfil && !$fotoPerfil->getSize()) {
+            $return['message'][] = 'Foto de perfil inválida';
+        } elseif($taxaPercent && ($taxaPercent < 0 && $taxaPercent > 100)){
+            $return['message'][] = 'Taxa de porcentagem é inválida';
+        } elseif($taxaValor && $taxaValor < 0){
+            $return['message'][] = 'Valor de taxa é inválido';
+        }
+        else {
+            $corretor->nome = $data['nome'];
+            $corretor->cpf = $data['cpf'];
+            $corretor->phone = $data['phone'];
+            $corretor->email = $data['email'];
+
+            if($fotoPerfil){
+                // TODO:
+                // Remover antiga na AWS
+                // Fazer upload na AWS
+                $awsFilePath= "";
+                $corretor->profile_picture = $awsFilePath;
+            }
+
+            $corretor->taxa_venda_valor = $data['taxa_valor'] ?? 0;
+            $corretor->taxa_venda_porcentagem = $data['taxa_percent'] ?? 0;
+            $corretor->save();
+
+            $return['success'] = true;
+            $return['message'][] = 'Corretor atualizado com sucesso';
+        }
+
+        $return['message'] = implode("<br>", $return['message']);
+
+        return redirect("admin/corretores/{$corretor->id}/edit")->with("return", $return);
     }
 
     /**

@@ -22,7 +22,7 @@ class CreateAgendamentosTable extends Migration
             $table->enum("status", [ 'A', 'C', 'E', 'N', 'R' ]); // A - Agendado, C - Cancelado, E - Esperando aprovação admin, N - Negado pelo admin, R - Realizado
             $table->enum("type", [ 'V', 'R']); // V - Visita, R - Reserva
 
-            $table->foreignId("user_id")->index();
+            $table->foreignId("user_id")->index()->nullable();
             $table->foreignId("corretor_id")->index()->nullable();
             $table->foreignId("lote_id")->index()->nullable();
             $table->foreignId("loteamento_id")->index();

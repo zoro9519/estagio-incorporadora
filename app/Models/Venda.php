@@ -9,8 +9,8 @@ class Venda extends Model
 {
     use HasFactory;
 
-    public function lote(){
-        return $this->belongsTo(Lote::class, 'lote_id', 'id');
+    public function lote() {
+        return $this->belongsTo(Lote::class, 'lote_id');
     }
 
     public function comprador()

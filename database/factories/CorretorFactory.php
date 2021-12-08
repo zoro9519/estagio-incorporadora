@@ -29,9 +29,11 @@ class CorretorFactory extends Factory
             "nome" => $this->faker->name(),
             "documento" => $faker->cpf(),
             "phone" => $faker->phoneNumber(),
+            "email" => $faker->email(),
             "taxa_venda_porcentagem" => $this->faker->randomFloat(3, null, 100),
             "taxa_venda_valor" => $this->faker->randomFloat(2, 0, 2000),
             "ativo" => $this->faker->boolean(80),
+            "profile_picture" => $this->faker->imageUrl(),
             "imobiliaria_id" => $imobiliaria
         ];
     }

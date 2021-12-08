@@ -17,7 +17,7 @@ class CreateLotesTable extends Migration
             $table->id();
 
             $table->string("descricao", 100);
-            $table->decimal("area");
+            $table->decimal("area", 20);
             $table->decimal("valor", 20, 2)->default(0);
             $table->enum("status", [ 'R', 'L', 'V', 'C' ])->default('L'); // R - Reservado, L - Livre, V - Vendido, C - Cancelado
 

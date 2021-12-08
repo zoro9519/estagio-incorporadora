@@ -37,6 +37,7 @@ class ImobiliariaFactory extends Factory
             'uf' => $this->faker->stateAbbr(),
             'cep' => $this->faker->numerify("##########"),
             'email' => $this->faker->companyEmail(),
+            'phone' => $this->faker->e164PhoneNumber(),
 
         ];
     }

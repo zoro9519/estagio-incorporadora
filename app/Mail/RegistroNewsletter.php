@@ -13,14 +13,20 @@ class RegistroNewsletter extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public User $user;
+    public Loteamento $loteamento;
+    public Array $data;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, Loteamento $loteamento)
+    public function __construct(User $user, Loteamento $loteamento, $data)
     {
-        //
+        $this->user = $user;
+        $this->loteamento = $loteamento;
+        $this->data = $data;
     }
 
     /**
@@ -30,6 +36,6 @@ class RegistroNewsletter extends Mailable
      */
     public function build()
     {
-        return $this->view('template.main.newsletter');
+        return $this->view('templates.mail.newsletter');
     }
 }

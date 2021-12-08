@@ -19,6 +19,7 @@ class CreateLoteamentosTable extends Migration
             $table->string("descricao", 200);
             $table->string("link", 50)->unique();
             $table->decimal("area");
+            $table->boolean("status")->default(1);
             $table->foreignId("coordenada_id")->index()->nullable();
 
             $table->timestamps();

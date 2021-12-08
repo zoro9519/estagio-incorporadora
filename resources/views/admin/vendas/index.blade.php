@@ -14,7 +14,7 @@
             
                         <form action="">
                             <div class="row">
-                                <div class="col-4">
+                                {{-- <div class="col-4">
                                     <div class="form-group">
                                         <label>Status da Venda</label>
                                         <select name="filterStatus" class="form-control">
@@ -25,6 +25,18 @@
                                             <option value="F">Finalizado</option>
 
                                         </select>
+                                    </div>
+                                </div> --}}
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Data inicial</label>
+                                        <input type="date" name="filterDataInicio" class="form-control" value="{{Request::get('filterDataInicio') ??''}}">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Data final</label>
+                                        <input type="date" name="filterDataFim" class="form-control" value="{{Request::get('filterDataFim') ??''}}">
                                     </div>
                                 </div>
                             </div>
@@ -44,8 +56,8 @@
                                     <th>#</th>
                                     <th>Comprador</th>
                                     <th>Lote</th>
-                                    <th>Data de realização</th>
-                                    <th>Situação</th>
+                                    <th>Data</th>
+                                    {{-- <th>Situação</th> --}}
                                     <th>Valor negociado</th>
                                     <th>Ações</th>
                                 </thead>
@@ -54,20 +66,20 @@
                                     <tr>
                                         <td>{{ $venda->id }}</td>
                                         <td>
-                                            <a href="{{route("admin.users.show", [ 'user' => $venda->comprador()->first() ])}}">
+                                            <a href="{{route("admin.users.show", [ 'user' => $venda->comprador ])}}">
                                                 {{ $venda->comprador()->first()->nome }}
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{route("admin.lotes.show", [ 'lote' => $venda->lote()->first() ])}}">
-                                                {{ $venda->comprador()->first()->nome }}
+                                            <a href="{{route("admin.lotes.show", [ 'lote' => $venda->lote ])}}">
+                                                {{ $venda->lote->descricao }}
                                             </a>
                                         </td>
                                         <td>{{ date("d/m/Y H:i:s", strtotime($venda->created_at)) }}</td>
                                         {{-- <td>{{ $venda->loteamento()->nome ?? "Não definido" }}</td> --}}
                                         {{-- <td>{{ $venda->lote()->nome ?? "Não definido" }}</td> --}}
-                                        <td>-{{ $venda->status }}</td>
-                                        <td>{{ $venda->valor }}</td>
+                                        {{-- <td>-{{ $venda->status }}</td> --}}
+                                        <td>{{numberToMoney($venda->valor) }}</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm" href="{{ route('admin.vendas.show', ['venda' => $venda]) }}">
                                                 <i class="fas fa-eye">

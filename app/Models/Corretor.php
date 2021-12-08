@@ -19,11 +19,13 @@ class Corretor extends Model
 
     protected $fillable = [
         'nome', 
-        'documento', 
+        'cpf', 
         'phone', 
+        'email',
         'taxa_venda_porcentagem', 
         'taxa_venda_valor', 
         'ativo',
-        'imobiliaria_id'
+        'imobiliaria_id',
+        'profile_picture'
     ];
 }

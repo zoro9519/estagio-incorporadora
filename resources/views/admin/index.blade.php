@@ -4,8 +4,8 @@
     <section class="content">
         {{-- Cards da dashboard --}}
         <div class="row">
-            <div class="col col-4">
-                <a class="card m-5 alert-warning" href="{{route("admin.users.all")}}">
+            <div class="col col-6">
+                <a class="card m-5 alert-warning" href="{{route("admin.users.all", ['filterStatus' => User::STATUS_EMESPERA])}}">
                     <div class="card-header">
                         <div class="row">
                             <div class="col">
@@ -15,8 +15,8 @@
                     </div>
                 </a>
             </div>
-            <div class="col col-4">
-                <a class="card m-5 alert-warning" href="{{route("admin.agendamentos.all", [ "filterStatus"=> "E"])}}">
+            <div class="col col-6">
+                <a class="card m-5 alert-warning" href="{{route("admin.agendamentos.all", [ "filterStatus"=> Agendamento::STATUS_EMESPERA, "filterType" => Agendamento::TYPE_VISITA])}}">
                     <div class="card-header">
                         <div class="row">
                             <div class="col">
@@ -26,7 +26,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col col-4">
+            {{-- <div class="col col-4">
                 <div class="card m-5">
                     <div class="card-header">
                         <div class="row">
@@ -43,12 +43,12 @@
                         <div class="row">
                             <div class="col">
                                 <a href="
-                                ">Meus dados</a>
+                                "></a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
     </section>

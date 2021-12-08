@@ -16,7 +16,10 @@ class CreateLandingPagesTable extends Migration
         Schema::create('landing_pages', function (Blueprint $table) {
             $table->id();
             
-            $table->string("descricao", 200);
+            $table->string("descricao", 200)->nullable();
+            $table->string("endereco_completo", 300)->nullable();
+            $table->string("texto_acompahe_a_obra", 200)->nullable();
+            $table->decimal("percentual_acompahe_a_obra", 5, 2)->nullable()->default(0);
             $table->string("cor_fundo", 20)->default("#fff");
             $table->string("cor_texto", 20)->default("#000");
 

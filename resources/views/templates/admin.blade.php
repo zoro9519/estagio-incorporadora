@@ -14,7 +14,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url("template/assets/adminlte.css") }}">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    {{-- <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css"> --}}
 
     @yield("css")
 
@@ -38,7 +38,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
-    <div class="wrapper">
+    <div class="wrapper" style="max-width: 100%">
 
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -47,11 +47,11 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                {{-- <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                {{-- <li class="nav-item">
+                    @yield('breadcrumb')
+                    <a class="nav-link" role="button" href="">
+                        @yield('page_title')
+                    </a>
                 </li> --}}
             </ul>
 
@@ -82,96 +82,21 @@
 
                 <!-- Messages Dropdown Menu -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
+                    <a class="nav-link" data-toggle="dropdown" href="{{route("admin.users.all", ['filterStatus' => User::STATUS_EMESPERA])}}" title="Contas Pendentes">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="badge badge-warning navbar-badge">{{$contas_pendentes}}</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="{{ url("template/assets/img/user1-128x128.jpg") }}" alt="User Avatar"
-                                    class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="{{ url("template/assets/img/user8-128x128.jpg") }}" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="{{ url("template/assets/img/user3-128x128.jpg") }}" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i
-                                                class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
                 </li>
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
+                    <a class="nav-link" data-toggle="dropdown" href="{{route('admin.agendamentos.all', [ "filterStatus"=> Agendamento::STATUS_EMESPERA, "filterType" => Agendamento::TYPE_VISITA])}}" title="Agendamentos Pendentes">
+                        <i class="far fa-calendar"></i>
+                        <span class="badge badge-warning navbar-badge">{{$agendamentos_pendentes}}</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">15 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                    </div>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route("admin.auth.logout")}}" role="button">
+                    <a class="nav-link" href="{{route("admin.auth.logout")}}" role="button" title="Sair">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
                 </li>
@@ -280,15 +205,24 @@
 
                         <li class="nav-header">RELATÓRIOS</li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{route('admin.relatorios.agendamentos')}}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
-                                    ----
-                                    <span class="badge badge-info right">2</span>
+                                    Agendamentos
+                                    {{-- <span class="badge badge-info right">2</span> --}}
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{route('admin.relatorios.lotes')}}" class="nav-link">
+                                <i class="nav-icon fas fa-map-marker-alt"></i>
+                                <p>
+                                    Lotes
+                                    {{-- <span class="badge badge-info right">2</span> --}}
+                                </p>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
                             <a href="" class="nav-link">
                                 <i class="nav-icon far fa-image"></i>
                                 <p>
@@ -324,7 +258,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -332,22 +266,21 @@
             <!-- /.sidebar -->
         </aside>
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper" data-loading-screen="750">
+        <div class="content-wrapper">
         
             <div class="tab-content">
-
                 @yield("content")
             </div>
+            <!-- /.content-wrapper -->
         </div>
-        <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; {{ date("Y") }} - <a href="https://adminlte.io">{{ env("APP_NAME") }}</a></strong>
+            <strong>Copyright &copy; {{ date("Y") }} - {{ env("APP_NAME") }}</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> {{ env( "APP_VERSION", '0.0') }}
             </div>
         </footer>
-
+            
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
@@ -367,13 +300,32 @@
     <!-- Bootstrap 4 -->
     <script src="{{ url("template/assets/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
     <!-- overlayScrollbars -->
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    {{-- <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> --}}
     <!-- AdminLTE App -->
-    {{-- <script src="{{ url("template/assets/js/adminlte.js") }}"></script> --}}
+    <script src="{{ url("template/assets/js/adminlte.js") }}"></script>
     <!-- AdminLTE for demo purposes -->
     {{-- <script src="{{ url("template/assets/js/demo.js") }}"></script> --}}
-    {{-- <script src="{{ url("template/inputmask.js") }}"></script> --}}
+    <script src="{{ url("template/assets/js/jquerymask.js") }}"></script>
+    <script src="{{ url("template/assets/js/maskMoney.js") }}"></script>
+    
     <script src="{{ url("js/main.js") }}"></script>
+    <script>
+        $(document).ready(function(){
+            $(".money").maskMoney({
+                prefix: "R$ ",
+                decimal: ",",
+                thousands: "."
+            });
+
+            $('.cpf').mask('000.000.000-00', {reverse: true});
+            $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
+            $('.phone').mask('(00) 00000-0000');
+            $('.cep').mask('00000-000');
+            $('.coordenate').mask('000.000000000000000', {
+                reverse: true
+            });
+        });
+    </script>
     @yield("js")
 </body>
 

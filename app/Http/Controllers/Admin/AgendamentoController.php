@@ -36,7 +36,12 @@ class AgendamentoController extends Controller
 
         $agendamentos = Agendamento::where($filters)->get()->all();
 
-        $corretores = Corretor::orderBy("nome", 'asc')->get();
+        $corretores = Corretor::with(['imobiliaria' => function ($query) {
+            $query->orderBy('nome', 'asc');
+        }])
+        ->orderBy("nome", 'asc')
+        ->get();
+
         $loteamentos = Loteamento::orderBy("nome", 'asc')->get();
 
         return view("admin.agendamentos.index")->with("agendamentos", $agendamentos)->with("corretores", $corretores)->with("loteamentos", $loteamentos);
@@ -94,6 +99,11 @@ class AgendamentoController extends Controller
      */
     public function update(Request $request, Agendamento $agendamento)
     {
+        $return = [
+            'success' => false,
+            'message' => []
+        ];
+
         $allowed_status = [ 
             'A', 
             'C', 
@@ -103,24 +113,47 @@ class AgendamentoController extends Controller
         ]; 
         // A - Agendado, C - Cancelado, E - Esperando aprovação admin, N - Negado pelo admin, R - Realizado
 
+        $corretor = Corretor::find($request->input("corretor", 0));
+        
+        if(!$corretor){
+            $return['message'][] = "Corretor não encontrado";
+        } else {
+            $agendamento->corretor_id = $corretor->id;
+        }
+
         $novo_status = $request->input("status");
-
+        
         if(in_array($novo_status, $allowed_status)){
-
             $agendamento->status = $novo_status;
-
         }
-
-        $corretor = Corretor::find($request->input("corretor"))->first();
-
-        if(!$agendamento->corretor && !$corretor){
-            return back()->with("error", "É necessário definir um corretor");
-        }
-
-        $agendamento->corretor_id = $corretor->id;
-        $agendamento->save();
-        return back()->with("success", $corretor ? "Corretor atribuído com sucesso" : "Corretor removido");
+        
+        if(empty($return['message'])){
             $agendamento->save();
+
+            $return['success'] = true;
+            $return['message'][] = 'Agendamento atualizado com sucesso';
+            
+            if($novo_status != $agendamento->status) {
+                switch($novo_status)
+                {
+                    case 'C':
+                        // Enviar email para user
+                        // Enviar email para corretor
+                        break;
+                    case 'N':
+                        // Enviar email para user sobre cancelamento
+                        break;
+                    case 'A':
+                        // Enviar email para user e corretor sobre efetivação do agendamento
+                        break;
+                    case 'R':
+                        // Enviar email para cliente solicitando feedback
+                }
+            }
+        }
+        $return['message'] = implode("<br>", $return['message']);
+
+        return redirect(route('admin.agendamentos.all'))->with("return", $return);
     }
 
     /**
@@ -152,23 +185,7 @@ class AgendamentoController extends Controller
             $agendamento->status = $novo_status;
             $agendamento->save();
 
-            switch($novo_status)
-            {
-
-                case 'C':
-                    // Enviar email para user
-                    // Enviar email para corretor
-                    break;
-                case 'N':
-                    // Enviar email para user sobre cancelamento
-                    break;
-                case 'A':
-                    // Enviar email para user e corretor sobre efetivação do agendamento
-                    break;
-                case 'R':
-                    // Enviar email para cliente solicitando feedback
-
-            }
+            
 
             return back();
         }

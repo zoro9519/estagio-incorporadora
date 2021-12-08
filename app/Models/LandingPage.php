@@ -9,8 +9,13 @@ class LandingPage extends Model
 {
     use HasFactory;
 
+    protected $table = 'landing_pages';
+
     protected $fillable = [
         'descricao',
+        'endereco_completo',
+        'percentual_acompanhe_a_obra',
+        'texto_acompanhe_a_obra',
         'cor_fundo',
         'cor_texto'
     ];

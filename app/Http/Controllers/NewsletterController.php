@@ -8,8 +8,9 @@ use App\Models\NewsletterMember;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
-class NewsletterMemberController extends Controller
+class NewsletterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -89,15 +90,14 @@ class NewsletterMemberController extends Controller
 
     public function registerMember(Loteamento $loteamento, Request $request)
     {
-        // $request->validate([
-        //     'email' => 'required',
-        //     'link'  => 'required',
-        //     'termos_uso' => 'required'
-        // ]);
+        $return = [
+            'success' => false,
+            'message' => []
+        ];
 
         $data = $request->input();
 
-        $userSearch = User::where("email", $data['email'])->get()[0] ?? [];
+        $userSearch = User::where("email", $data['email'])->first() ?? [];
         $user = $userSearch;
 
         if(empty($userSearch)){
@@ -105,8 +105,8 @@ class NewsletterMemberController extends Controller
 
             $user->nome = $data['nome'];
             $user->email = $data['email'];
-            $user->password = substr($data['email'], 0, 6);
-            $user->status = 'A'; // Aguardando Aprovação
+            $user->password = Hash::make(substr($data['email'], 0, 6));
+            $user->status = User::STATUS_EMESPERA;
 
             $user->save();
         }
@@ -119,14 +119,16 @@ class NewsletterMemberController extends Controller
                 'interests' => isset($data['interests']) ? "A" : "L"
             ]);
             
-            // Mail::to($user->email)
-            // ->send(new RegistroNewsletter($user, $loteamento));
-            $message = "Parabéns, consulte seu email para maiores informações";
+            Mail::to($user->email)->send(new RegistroNewsletter($user, $loteamento, $data));
+
+            $return['message'][] = "Parabéns, consulte seu email para maiores informações";
+            $return['success'] = true;
         } else{
-            $message = "Conta já cadastrada na newsletter";
+            $return['message'][] = "Conta já cadastrada na newsletter";
         }
 
-        return redirect()->back()->with("success", $message);
+        $return['message'] = implode("<br>", $return['message']);
 
+        return redirect(route('landing.view', ['loteamento' => $loteamento->link]))->with("return", $return);
     }
 }

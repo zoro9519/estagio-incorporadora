@@ -17,11 +17,13 @@ class CreateCorretorsTable extends Migration
             $table->id();
 
             $table->string("nome", 100);
-            $table->string("documento", 18);
+            $table->string("cpf", 18);
             $table->string("phone", 18);
+            $table->string("email");
             $table->decimal("taxa_venda_porcentagem");
-            $table->decimal("taxa_venda_valor");
+            $table->decimal("taxa_venda_valor", 11, 2);
             $table->boolean("ativo");
+            $table->string("profile_picture")->nullable();
 
             $table->foreignId("imobiliaria_id")->index()->nullable();
 

@@ -11,6 +11,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    const STATUS_EMESPERA = 'A';
+    const STATUS_APROVADO = 'V';
+    const STATUS_RECUSADO = 'E';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -51,5 +55,9 @@ class User extends Authenticatable
 
     public function agendamentos(){
         return $this->hasMany(Agendamento::class);
+    }
+
+    public function compras() {
+        return $this->hasMany(Venda::class, 'user_id');
     }
 }

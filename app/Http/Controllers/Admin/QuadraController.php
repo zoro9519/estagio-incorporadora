@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coordenada;
 use App\Models\Loteamento;
 use App\Models\Quadra;
 use Illuminate\Http\Request;
@@ -43,26 +44,35 @@ class QuadraController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'loteamento_id' => 'required',
-            'descricao'     => 'required'
-        ]);
+        $return = [
+            'success' => false,
+            'message' => []
+        ];
 
         $data = $request->all();
 
+        $latitudes = $data['latitudes_quadra'] ?? [];
+        $longitudes = $data['longitudes_quadra'] ?? [];
+
         $loteamento = Loteamento::find($data['loteamento_id']);
 
-        $return['success'] = false;
+        
         if(!$loteamento){
-            $return['message'] = "Loteamento não encontrado";
-        } else {
-
+            $return['message'][] = "Loteamento não encontrado";
+        }
+        if(count($latitudes) != count($longitudes)) {
+            $return['message'][] = "Dados de localização inválidos";
+        }
+        if(count($longitudes) < 3) {
+            $return['message'][] = "São necessários 3 pontos pelo menos para formar uma nova quadra";
+        } 
+        if(empty($return['message'])) {
             $quadraSearch = Quadra::where("descricao", $data['descricao'])
             ->where("loteamento_id", $data['loteamento_id'])
             ->first();
 
             if($quadraSearch){
-                $return['message'] = "Descrição de lote já cadastrado";
+                $return['message'][] = "Descrição de quadra já cadastrada";
             } else {
 
                 $quadra = new Quadra;
@@ -70,16 +80,30 @@ class QuadraController extends Controller
                 $quadra->descricao = $data['descricao'];
                 $quadra->loteamento_id = $loteamento->id;
 
+                $coords = [];
+
+                foreach($longitudes as $i => $long)
+                {
+                    if($latitudes[$i]){
+                        $coord = [
+                            "latitude" => $latitudes[$i],
+                            "longitude" => $long,
+                            "zoom"      => 7
+                        ];
+                        $coords[] = $coord;
+                    }
+                }
                 $quadra->save();
+                
+                $quadra->coordenadas()->createMany($coords);
+
                 $return['success'] = true;
+                $return['message'][] = 'Quadra criada com sucesso';
             }
         }
 
-        if($return['success']){
-            return redirect("admin/loteamentos/{$data['loteamento_id']}");
-            
-        }
-        return redirect("admin/loteamentos/{$data['loteamento_id']}")->with("error_message_quadra", $return['message']);
+        $return['message'] = implode("<br>", $return['message']);
+        return redirect("admin/loteamentos/{$data['loteamento_id']}")->with("return", $return);
 
     }
 
@@ -116,7 +140,31 @@ class QuadraController extends Controller
      */
     public function update(Request $request, Quadra $quadra)
     {
-        //
+        $return = [
+            'success' => false,
+            'message' => []
+        ];
+
+        $data = $request->all();
+
+        if(empty($data['descricao'])) {
+            $return['message'][] = 'Descrição não informada';
+        }
+        if($quadra->loteamento->quadras->where('descricao', $data['descricao'])->whereNotIn('id', $quadra->id)->count()){
+            $return['message'][] = 'Não foi possível salvar. Descrição aplicada em outra quadra do mesmo lote.';
+        }
+        if(empty($return['message'])) {
+            $quadra->descricao = $data['descricao'];
+            $quadra->save();
+
+            $return['success'] = true;
+            $return['message'][] = 'Quadra atualizada com sucesso';
+        }
+
+        $return['message'] = implode("<br>", $return['message']);
+
+        return redirect("admin/quadras/{$quadra->id}")->with("return", $return);
+
     }
 
     /**
