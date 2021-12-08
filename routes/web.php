@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('user.auth');
+    return redirect('/user');
     // return view('welcome');
 });
 
