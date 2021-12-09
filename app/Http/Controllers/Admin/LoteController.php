@@ -213,7 +213,7 @@ class LoteController extends Controller
             $reserva = new Agendamento();
             $reserva->data_inicio = $dataInicio;
             $reserva->data_fim = $dataFim;
-            $reserva->observacao = empty($data['observacao']) ? $data['observacao'] : "Reserva de lote";
+            $reserva->observacao = !empty($data['observacao']) ? $data['observacao'] : "Reserva de lote";
             $reserva->status = Agendamento::STATUS_AGENDADO;
             $reserva->type = Agendamento::TYPE_RESERVA;
             $reserva->lote_id = $lote->id;

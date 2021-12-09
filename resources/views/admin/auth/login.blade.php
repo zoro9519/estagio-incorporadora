@@ -46,9 +46,9 @@
                     @endif
                 </form>
 
-                <p class="mb-1">
+                {{-- <p class="mb-1">
                     <a href="{{ route("admin.auth.remember") }}">Esqueci minha Senha</a>
-                </p>
+                </p> --}}
                 <p class="mb-1">
                     <a href="{{ route("user.auth") }}">Acesso via cliente</a>
                 </p>

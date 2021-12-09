@@ -212,9 +212,7 @@
                     })
             } else if(moment.contains('fc-day-today') || moment.contains('fc-day-future')){
 
-                console.warn("B");
                 // Valida e abre modal
-                console.log(ev);
                 // let modal_agendamento = $("#modal-add-agendamento");
                 $('#modal-add-agendamento #id').html();
                 // $('#modal-add-agendamento #start').val(ev.start.toISOString("DD-MM-YYYY HH:MM:SS"));

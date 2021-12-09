@@ -37,11 +37,11 @@ Route::prefix("admin")->group(function(){
     // Auth related 
     Route::prefix("auth")->group(function() {
         Route::get("/", [\App\Http\Controllers\Admin\AuthController::class, "index"])->name("admin.auth");
-        Route::get("remember", [\App\Http\Controllers\Admin\AuthController::class, "remember"])->name("admin.auth.remember");
         Route::post("login", [\App\Http\Controllers\Admin\AuthController::class, "login"])->name("admin.auth.login");
         Route::post("store", [\App\Http\Controllers\Admin\AuthController::class, "store"])->name("admin.auth.store");
-        Route::post("forgot", [\App\Http\Controllers\Admin\AuthController::class, "forgot"])->name("admin.auth.forgot");
-        Route::post("reset", [\App\Http\Controllers\Admin\AuthController::class, "reset"])->name("admin.auth.reset");
+        // Route::get("remember", [\App\Http\Controllers\Admin\AuthController::class, "remember"])->name("admin.auth.remember");
+        // Route::post("forgot", [\App\Http\Controllers\Admin\AuthController::class, "forgot"])->name("admin.auth.forgot");
+        // Route::post("reset", [\App\Http\Controllers\Admin\AuthController::class, "reset"])->name("admin.auth.reset");
     });
 });
 
@@ -190,11 +190,11 @@ Route::prefix("user")->group(function(){
     // Auth related 
     Route::prefix("auth")->group(function() {
         Route::get("/", [AuthController::class, "index"])->name("user.auth");
-        Route::get("remember", [AuthController::class, "remember"])->name("user.auth.remember");
+        // Route::get("remember", [AuthController::class, "remember"])->name("user.auth.remember");
         Route::post("login", [AuthController::class, "login"])->name("user.auth.login");
         // Route::post("register", [AuthController::class, "register"]);
-        Route::post("forgot", [AuthController::class, "forgot"]);
-        Route::post("reset", [AuthController::class, "reset"]);
+        // Route::post("forgot", [AuthController::class, "forgot"]);
+        // Route::post("reset", [AuthController::class, "reset"]);
     });
     
     // Auth is mandatory
