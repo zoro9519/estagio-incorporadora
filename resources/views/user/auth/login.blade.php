@@ -45,9 +45,9 @@
                     </div>
                 </form>
 
-                <p class="mb-1">
+                {{-- <p class="mb-1">
                     <a href="{{ route("user.auth.remember") }}">Esqueci minha Senha</a>
-                </p>
+                </p> --}}
                 {{-- <p class="mb-0">
                     <a href="register.html" class="text-center">Cadastrar</a>
                 </p> --}}
