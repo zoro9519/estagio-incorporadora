@@ -107,6 +107,7 @@ class NewsletterController extends Controller
             $user->email = $data['email'];
             $user->password = Hash::make(substr($data['email'], 0, 6));
             $user->status = User::STATUS_EMESPERA;
+            $user->is_new = 1;
 
             $user->save();
         }

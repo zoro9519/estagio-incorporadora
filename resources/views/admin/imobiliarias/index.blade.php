@@ -8,6 +8,14 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
+                            @if(session('return'))
+                            <div class="col-12">
+                                <div class="alert alert-{{session('return')['success'] ? 'success' : 'warning'}}">
+                                    {{ session('return')['message'] }}
+                                </div>
+                            </div>
+                            @endif
+                            
                             <div class="col-8">
                                 <h4>Imobiliárias</h4>
                             </div>
@@ -36,7 +44,7 @@
                                         <div class="row">
 
                                             <div class="col-12">
-                                                <h3>Informações de identificação</h3>
+                                                <h3>Informações de Identificação</h3>
                                             </div>
                                             <div class="col col-6 col-xs-12">
                                                 <div class="form-group">
@@ -83,7 +91,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col col-12">
-                                                <h3>Dados de endereço</h3>
+                                                <h3>Dados de Endereço</h3>
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div class="form-group">

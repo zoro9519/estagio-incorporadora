@@ -7,6 +7,14 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
+                    @if(session('return'))
+                    <div class="col-12">
+                        <div class="alert alert-{{session('return')['success'] ? 'success' : 'warning'}}">
+                            {{ session('return')['message'] }}
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="col col-8">
                         <h4 class="">Loteamentos</h4>
                     </div>
@@ -45,7 +53,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Área:</label>
-                                <input type="number" step="0.1" name="area" class="form-control">
+                                <input type="number" step="0.1" name="area" class="form-control" max=100000000>
                             </div>
                         </div>
                         <div class="modal-footer text-right">
@@ -122,18 +130,21 @@
                                 </span>
                             </td>
                             <td class="project-actions text-center">
-                                <a class="btn btn-primary btn-sm"
+                                <div class="btn-group">
+
+                                    <a class="btn btn-primary btn-sm"
                                     href="{{ route('admin.loteamentos.show', ['loteamento' => $loteamento]) }}">
-                                    <i class="fas fa-eye"></i> Ver
-                                </a>
-                                <a class="btn btn-info btn-sm" href="{{route('admin.loteamentos.edit', ['loteamento' => $loteamento->id])}}">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                    <a class="btn btn-info btn-sm" href="{{route('admin.loteamentos.edit', ['loteamento' => $loteamento->id])}}">
                                         <i class="fas fa-pencil-alt">
                                         </i>
                                         Editar
                                     </a>
-                                {{-- <a class="btn btn-danger btn-sm" href="#">
-                                    <i class="fas fa-trash"></i> Delete
-                                </a> --}}
+                                    {{-- <a class="btn btn-danger btn-sm" href="#">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a> --}}
+                                </div>
                             </td>
                         </tr>
                     @endforeach

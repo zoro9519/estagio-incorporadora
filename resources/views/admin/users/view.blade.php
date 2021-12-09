@@ -42,11 +42,11 @@
                                         <td>Criado Em:</td>
                                         <td>{{ date('d/m/Y H:i:s', strtotime($user->created_at)) }}</td>
                                     </tr>
+                                    @if(!$user->is_new)
                                     <tr>
                                         <td colspan="2"><a href="{{route("admin.users.edit", ['user' => $user->id])}}" class='btn btn-block btn-info'>Editar</a></td>
-                                       
                                     </tr>
-
+                                    @endif
                                 </table>
                             </div>
                         </div>

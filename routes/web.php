@@ -192,7 +192,7 @@ Route::prefix("user")->group(function(){
         Route::get("/", [AuthController::class, "index"])->name("user.auth");
         Route::get("remember", [AuthController::class, "remember"])->name("user.auth.remember");
         Route::post("login", [AuthController::class, "login"])->name("user.auth.login");
-        Route::post("register", [AuthController::class, "register"]);
+        // Route::post("register", [AuthController::class, "register"]);
         Route::post("forgot", [AuthController::class, "forgot"]);
         Route::post("reset", [AuthController::class, "reset"]);
     });

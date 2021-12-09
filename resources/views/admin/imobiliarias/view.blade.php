@@ -8,10 +8,14 @@
                 <div class="card">
 
                     <div class="card-body">
-                        @if(session("error"))
-                        <div class="alert alert-danger">{{session("error")}} - 9999</div>
-                        @endif
                         <div class="row">
+                            @if(session('return'))
+                            <div class="col-12">
+                                <div class="alert alert-{{session('return')['success'] ? 'success' : 'warning'}}">
+                                    {{ session('return')['message'] }}
+                                </div>
+                            </div>
+                            @endif
                             <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
 
                                 <h4 class="">Dados da Imobiliária </h4>

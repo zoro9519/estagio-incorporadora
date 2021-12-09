@@ -10,6 +10,7 @@ use App\Models\Corretor;
 use App\Models\Lote;
 use App\Models\User;
 use App\Models\Venda;
+use App\Models\Proprietario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -70,8 +71,8 @@ class VendaController extends Controller
             $return['message'][] = 'Forma pagamento precisa ser preenchido';
         } elseif(empty($data['numero_parcelas'])){
             $return['message'][] = 'Número parcelas precisa ser preenchido';
-        } elseif(!is_int($data['numero_parcelas']) || $data['numero_parcelas'] < 1){
-            $return['message'][] = 'Número parcelas é inválido';
+        } elseif(!is_numeric($data['numero_parcelas']) || $data['numero_parcelas'] < 1){
+            $return['message'][] = 'Número de parcelas é inválido';
         } elseif(empty($data['user'])){
             $return['message'][] = 'Cliente precisa ser preenchido';
         } elseif(!($user = User::find($data['user']))){
@@ -80,9 +81,8 @@ class VendaController extends Controller
             $return['message'][] = 'Corretor precisa ser preenchido';
         } elseif(!($corretor = Corretor::find($data['corretor']))){
             $return['message'][] = 'Corretor não encontrado';
-        } elseif(empty($data['x'])){
-            $return['message'][] = 'x precisa ser preenchido';
         }
+
         if(empty($return['message'])){
             DB::beginTransaction();
             $venda = new Venda;
@@ -98,6 +98,24 @@ class VendaController extends Controller
             $venda->save();
 
             $lote->status = Lote::STATUS_SOLD; // Lote vendido
+
+            $proprietario = new Proprietario();
+            $proprietario->lote_id = $lote->id;
+            $proprietario->data_inicio = $venda->created_at;
+
+            $proprietario->documento = $user->cpf;
+            $proprietario->nome = $user->nome;
+            $proprietario->email = $user->email;
+            $proprietario->phone = $user->phone;
+            $proprietario->logradouro = $user->logradouro;
+            $proprietario->numero = $user->numero;
+            $proprietario->bairro = $user->bairro;
+            $proprietario->cidade = $user->cidade;
+            $proprietario->uf = $user->uf;
+            $proprietario->cep = $user->cep;
+
+            $lote->proprietarios()->save($proprietario);
+
             $lote->save();
 
             if($user->status != User::STATUS_APROVADO){
@@ -107,7 +125,8 @@ class VendaController extends Controller
 
             // Rotina para cancelar todos agendamentos futuros
             $lote->agendamentos()
-                ->where("data_fim", ">", date('Y-m-d H:i:s'))
+                ->whereNull('data_fim')
+                ->orWhere("data_fim", ">", date('Y-m-d H:i:s'))
                 ->update([
                     'status' => Agendamento::STATUS_CANCELADO
                 ]);
@@ -125,7 +144,7 @@ class VendaController extends Controller
 
 
         // Disparar email para cliente de lote vendido
-        return back()->with("success", "Este lote foi vendido")->with('return', $return);
+        return back()->with('return', $return);
 
     }
 
@@ -137,7 +156,7 @@ class VendaController extends Controller
      */
     public function show(Venda $venda)
     {
-        //
+        return view('admin.vendas.view')->with('venda', $venda);
     }
 
     /**

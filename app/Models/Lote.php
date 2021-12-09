@@ -57,7 +57,7 @@ class Lote extends Model
 
     public function atual()
     {
-        return $this->hasMany(Proprietario::class)->where("data_fim", null)->get();
+        return $this->hasMany(Proprietario::class)->where("data_fim", null);
     }
 
     public function agendamentos()

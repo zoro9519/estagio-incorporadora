@@ -120,12 +120,12 @@
                                         <tr>
                                             <td>Latitude:</td>
                                             <td><input id="txtLatitude" class="form-control" name="latitude" step="0.000000000000001" type="number"
-                                                    value="{{$loteamento->coordenada->latitude}}"></td>
+                                                    value="{{$loteamento->coordenada ? $loteamento->coordenada->latitude : ''}}"></td>
                                         </tr>
                                         <tr>
                                             <td>Longitude:</td>
                                             <td><input id="txtLongitude" class="form-control" name="longitude" step="0.000000000000001"
-                                                    type="number" value="{{$loteamento->coordenada->longitude}}"></td>
+                                                    type="number" value="{{$loteamento->coordenada ? $loteamento->coordenada->longitude : ''}}"></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">

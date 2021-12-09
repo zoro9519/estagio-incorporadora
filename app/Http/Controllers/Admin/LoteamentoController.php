@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Loteamento;
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
+use App\Models\Coordenada;
 use App\Models\LandingPage;
 use App\Models\Lote;
 use Exception;
@@ -50,25 +51,39 @@ class LoteamentoController extends Controller
     {
         $return = [
             'success' => false,
+            'message' => []
         ];
 
-        $request->validate([
-            'nome' => 'required',
-            'descricao'     => 'required',
-            'link'     => 'required',
-            'area'     => 'required'
-        ]);
+        // $request->validate([
+        //     'nome' => 'required',
+        //     'descricao'     => 'required',
+        //     'link'     => 'required',
+        //     'area'     => 'required'
+        // ]);
 
         $data = $request->all();
 
-        $loteamentoSearch = Loteamento::where("nome", $data['nome'])->orWhere("link", $data['link'])->first();
+        $data['link'] = trim(strtolower($data['link'] ?? ''));
 
-        if($loteamentoSearch){
-            $return['message'] = "Nome já cadastrado";
+        if(empty($data['nome'])){
+            $return['message'][] = 'Nome precisa ser enviado';
+        } elseif(empty($data['descricao'])){
+            $return['message'][] = 'Descrição precisa ser enviada';
+        } elseif(empty($data['link'])){
+            $return['message'][] = 'Link precisa ser enviado';
+        } elseif(($loteamento = Loteamento::where('link', $data['link'])->orWhere('nome', $data['nome'])->first())){
+            $message = "Nome já cadastrado";
+            if($loteamento->link == $data['link'])
+                $message = 'Link já cadastrado. Tente outros valores';
+            
+            $return['message'][] = $message;
+        } elseif(empty($data['area'])){
+            $return['message'][] = 'Área precisa ser enviada';
+        } elseif(!is_numeric($data['area']) || $data['area'] < 0){
+            $return['message'][] = 'Área precisa ser um número válido';
+        }
 
-            if(strtolower($loteamentoSearch->link) == strtolower($data['link']))
-                $return['message'] = 'Link já cadastrado. Tente outros valores';
-        } else{
+        if(empty($return['message'])){
 
             $loteamento = new Loteamento();
 
@@ -85,9 +100,12 @@ class LoteamentoController extends Controller
             $landing->save();
 
             $return['success'] = true;
+            $return['message'][] = 'Loteamento cadastrado com sucesso';
         }
 
-        return redirect("admin/loteamentos");
+        $return['message'] = implode("<br>", $return['message']);
+
+        return redirect("admin/loteamentos")->with("return", $return);
     }
 
     /**
@@ -245,13 +263,19 @@ class LoteamentoController extends Controller
 
         $data = $request->all();
 
-        $loteamento->coordenada()->updateOrCreate([
-            'id' => $loteamento->coordenada->id
-        ], [
+        $coordenada = is_null($loteamento->coordenada_id)  
+            ? new Coordenada()
+            : $loteamento->coordenada;
+
+        $coordenada->fill([
             'latitude' => $data['latitude'],
             'longitude' => $data['longitude'],
             'zoom'      => $data['zoom'] ?? 7
-        ]);
+        ])->save();
+
+        $loteamento->coordenada()->associate($coordenada);
+    
+        $loteamento->save();
 
         return redirect()->back()->withErrors($validator, 'assets');
     }

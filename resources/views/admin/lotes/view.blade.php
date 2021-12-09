@@ -54,10 +54,10 @@
                                         <tr>
                                             <td>Último(s) Dono(s):</td>
                                             <td>
-                                                @if(!count($lote->atual()->all()))
+                                                @if(!($lote->atual->count()))
                                                 -
                                                 @endif
-                                                @foreach ($lote->atual() as $atual_prop)
+                                                @foreach ($lote->atual as $atual_prop)
                                                 - {{ $atual_prop->nome }}<br>
 
                                                 @endforeach
@@ -127,8 +127,8 @@
 
                                             <div class="form-group">
                                                 <label>Valor vendido:</label>
-                                                <input class="form-control" type="text" name="valor" required
-                                                    value="{{ $lote->valor }}">
+                                                <input class="form-control money" type="text" name="valor" id="valor_vendido" required
+                                                    value="{{ numberToMoney($lote->valor) }}">
                                             </div>
                                             <div class="form-group">
                                                 <label>Forma de Pagamento:</label>
@@ -228,27 +228,34 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
+
+                                            <h3>Dados da Transferência</h3>
+                                            <div class="form-group">
+                                                <label>Data de início do titular: *</label>
+                                                <input type="date" name="data_inicio" required class="form-control">
+                                            </div>
+
                                             <h3>Dados pessoais</h3>
                                             <div class="form-group">
-                                                <label>Nome:</label>
+                                                <label>Nome: *</label>
                                                 <input type="text" name="nome" required class="form-control">
                                             </div>
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label>Documento:</label>
-                                                        <input type="text" name="documento" required class="form-control">
+                                                        <label>Documento: *</label>
+                                                        <input type="text" name="documento" required class="form-control cpf">
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label>Celular:</label>
+                                                        <label>Celular: *</label>
                                                         <input type="text" name="phone" required class="form-control phone">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Email:</label>
+                                                <label>Email: *</label>
                                                 <input type="email" name="email" required class="form-control">
                                             </div>
 
@@ -256,29 +263,29 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label>CEP:</label>
-                                                        <input type="text" required="required" name="cep"
+                                                        <label>CEP: *</label>
+                                                        <input type="text" required name="cep"
                                                             class="form-control cep">
                                                     </div>
                                                 </div>
                                                 <div class="col-8">
                                                     <div class="form-group">
-                                                        <label>Logradouro:</label>
-                                                        <input type="text" required='required' name="logradouro"
+                                                        <label>Logradouro: *</label>
+                                                        <input type="text" required name="logradouro"
                                                             class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="form-group">
-                                                        <label>Número:</label>
-                                                        <input type="number" required='required' name="numero"
+                                                        <label>Número: </label>
+                                                        <input type="number" name="numero"
                                                             class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label>Bairro:</label>
-                                                        <input type="text" required="required" name="bairro"
+                                                        <label>Bairro: *</label>
+                                                        <input type="text" required name="bairro"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -290,15 +297,15 @@
                                                 </div>
                                                 <div class="col-8">
                                                     <div class="form-group">
-                                                        <label>Cidade:</label>
-                                                        <input type="text" required="required" name="cidade"
+                                                        <label>Cidade: *</label>
+                                                        <input type="text" required name="cidade"
                                                             class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="form-group">
-                                                        <label>UF:</label>
-                                                        <input type="text" required="required" name="uf"
+                                                        <label>UF: *</label>
+                                                        <input type="text" required name="uf"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -577,7 +584,7 @@
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label>Documento:</label>
-                                                    <input type="text" name="documento" required class="form-control">
+                                                    <input type="text" name="documento" required class="form-control cpf">
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -611,28 +618,28 @@
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>CEP:</label>
-                                                    <input type="text" required="required" name="cep"
+                                                    <input type="text" required name="cep"
                                                         class="form-control cep">
                                                 </div>
                                             </div>
                                             <div class="col-8">
                                                 <div class="form-group">
                                                     <label>Logradouro:</label>
-                                                    <input type="text" required='required' name="logradouro"
+                                                    <input type="text" required name="logradouro"
                                                         class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <label>Número:</label>
-                                                    <input type="number" required='required' name="numero"
+                                                    <input type="number" required name="numero"
                                                         class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label>Bairro:</label>
-                                                    <input type="text" required="required" name="bairro"
+                                                    <input type="text" required name="bairro"
                                                         class="form-control">
                                                 </div>
                                             </div>
@@ -645,14 +652,14 @@
                                             <div class="col-8">
                                                 <div class="form-group">
                                                     <label>Cidade:</label>
-                                                    <input type="text" required="required" name="cidade"
+                                                    <input type="text" required name="cidade"
                                                         class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <label>UF:</label>
-                                                    <input type="text" required="required" name="uf"
+                                                    <input type="text" required name="uf"
                                                         class="form-control">
                                                 </div>
                                             </div>
@@ -693,12 +700,12 @@
                                         </td>
                                         <td>
                                             <a class="btn btn-primary btn-sm"
-                                                href="{{ route('admin.lotes.proprietarios.show', ['proprietario' => $proprietario]) }}">
+                                                href="{{ route('admin.lotes.proprietarios.show', ['lote' => $lote, 'proprietario' => $proprietario]) }}">
                                                 <i class="fas fa-eye">
                                                 </i>
                                             </a>
                                             <a class="btn btn-danger btn-sm"
-                                                href="{{ route('admin.lotes.proprietarios.remove', ['proprietario' => $proprietario]) }}">
+                                                href="{{ route('admin.lotes.proprietarios.remove', ['lote' => $lote->id, 'proprietario' => $proprietario]) }}">
                                                 <i class="fas fa-trash">
                                                 </i>
                                             </a>
@@ -751,15 +758,21 @@
 
         </div>
 </section>
+@endsection
+
+@section('js')
 <script>
     var adminToken = '{{ Auth::user()->token }}';
     var siteUrl = "{{ env('APP_URL') }}";
     var tokenCRSF = "{{ csrf_token() }}";
     
+    $('form').on('submit', function(e) {
+        let v = $("#valor_vendido");
+        let val = $(v).maskMoney('unmasked')[0];
+        $(v).val(val);
+    });
 </script>
-@endsection
 
-@section('js')
 <script src="{{ url('js/HTTPClient.js') }}"></script>
 <script src="{{ url('js/lotes/view.js') }}"></script>
 @endsection

@@ -205,6 +205,7 @@
                                     <th>#</th>
                                     <th>Descrição</th>
                                     <th>Valor</th>
+                                    <th>Status</th>
                                     <th>Criado em</th>
                                     {{-- <th>Nº de Lotes</th> --}}
                                     <th>Ações</th>
@@ -236,6 +237,7 @@
                                         <td>{{ $lote->id }}</td>
                                         <td>{{ $lote->descricao }}</td>
                                         <td>{{ numberToMoney($lote->valor) }}</td>
+                                        <td>{{ $lote_status[$lote->status] }}</td>
                                         <td>{{ date('d/m/Y H:i:s', strtotime($lote->created_at)) }}</td>
                                         {{-- <td>{{ $lote->count() }}</td> --}}
                                         <td>

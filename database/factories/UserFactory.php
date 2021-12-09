@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'phone' => $this->faker->e164PhoneNumber(),
             'cpf' => $faker->cpf(),
             'status' => 'A',
+            'is_new' => $faker->boolean(),
             'logradouro' => $this->faker->streetAddress(),
             'numero' => $this->faker->numberBetween(1, 5000),
             'bairro' => $this->faker->streetName(),

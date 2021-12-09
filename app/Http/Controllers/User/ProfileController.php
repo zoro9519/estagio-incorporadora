@@ -41,6 +41,8 @@ class ProfileController extends Controller
             $user->uf = $request->get('uf');
             $user->cep = $request->get('cep');
             
+            $user->is_new = 0;
+
             $user->save();
 
             $return['success'] = true;

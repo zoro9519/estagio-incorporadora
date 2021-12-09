@@ -132,11 +132,13 @@
                                                 href="{{ route('admin.users.show', ['user' => $user]) }}">
                                                 <i class="fas fa-eye"></i> Ver
                                             </a>
+                                            @if(!$user->is_new)
                                             <a class="btn btn-info btn-sm" href="{{route("admin.users.edit", ["user" => $user->id])}}">
                                                 <i class="fas fa-pencil-alt"></i> Editar
                                             </a>
+                                            @endif
                                             {{-- Status de aguardando aprovação (precisa ser aprovado) --}}
-                                            @if ($user->status == User::STATUS_EMESPERA)
+                                            @if ($user->status == User::STATUS_EMESPERA && !$user->is_new)
                                                 <a class="btn btn-success btn-sm"
                                                     href="{{ route('admin.users.aprovar', [
                                                         'user' => $user,

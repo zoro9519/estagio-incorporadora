@@ -26,7 +26,8 @@ var Venda = {
                 $("#cliente_nome").html(user.nome);
             } else {
                 $("#errorResultSearch").html(json.error_message);
-    
+                $("#user_id").val("");
+                $("#cliente_nome").html("");
                 $("#errorResultSearch").removeClass("d-none");
     
             }

@@ -116,6 +116,7 @@ class UserController extends Controller
             $user->cidade = $data['cidade'];
             $user->uf = $data['uf'];
             $user->cep = $data['cep'];
+            $user->is_new = 0;
 
             $user->save();
 

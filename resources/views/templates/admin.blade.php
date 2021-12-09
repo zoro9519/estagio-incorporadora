@@ -145,7 +145,7 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin') ? 'show' : ''}}">
                             <a href="{{route("admin.home")}}" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
@@ -153,7 +153,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/users') || Request::is('admin/users/*') ? 'show' : ''}}">
                             <a href="{{ route("admin.users.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>
@@ -161,7 +161,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/agendamentos') || Request::is('admin/agendamentos/*') ? 'show' : ''}}">
                             <a href="{{ route("admin.agendamentos.all") }}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
@@ -169,7 +169,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/vendas') || Request::is('admin/vendas/*') ? 'show' : ''}}">
                             <a href="{{ route("admin.vendas.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-dollar-sign"></i>
                                 <p>
@@ -177,7 +177,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/loteamentos') || Request::is('admin/loteamentos/*') ? 'show' : ''}}">
                             <a href="{{ route("admin.loteamentos.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-map-marker-alt"></i>
                                 <p>
@@ -185,7 +185,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/imobiliarias') || Request::is('admin/imobiliarias/*') ? 'show' : ''}}">
                             <a href="{{ route("admin.imobiliarias.all") }}" class="nav-link">
                                 <i class="nav-icon far fa-building"></i>
                                 <p>
@@ -193,7 +193,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/corretores') || Request::is('admin/corretores/*') ? 'show' : ''}}">
                             <a href="{{ route("admin.corretores.all") }}" class="nav-link">
                                 <i class="nav-icon fas fa-user-tie"></i>
                                 <p>
@@ -204,7 +204,7 @@
                         
 
                         <li class="nav-header">RELATÓRIOS</li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/relatorios/agendamentos') ? 'show' : ''}}">
                             <a href="{{route('admin.relatorios.agendamentos')}}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
@@ -213,7 +213,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/relatorios/lotes') ? 'show' : ''}}">
                             <a href="{{route('admin.relatorios.lotes')}}" class="nav-link">
                                 <i class="nav-icon fas fa-map-marker-alt"></i>
                                 <p>

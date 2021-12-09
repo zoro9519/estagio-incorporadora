@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('cpf', 15)->nullable();
             $table->string('phone', 18)->nullable();
             $table->enum('status', [ 'A', 'V', 'E', 'D']);
+            $table->boolean('is_new')->default(true);
 
             // Endereco
             $table->string("logradouro", 100)->nullable();

@@ -13,7 +13,6 @@ class VendaRealizadaCorretor extends Mailable
     use Queueable, SerializesModels;
 
     public Venda $venda;
-    public Agendamento $agendamento;
 
     /**
      * Create a new message instance.
@@ -32,6 +31,6 @@ class VendaRealizadaCorretor extends Mailable
      */
     public function build()
     {
-        return $this->view('template.mail.venda.realizada-corretor');
+        return $this->view('templates.mail.venda.realizada-corretor')->subject('Venda Realizada');
     }
 }

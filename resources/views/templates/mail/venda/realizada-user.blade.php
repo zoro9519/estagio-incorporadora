@@ -23,16 +23,13 @@
                 <td>Quadra / Lote</td>
                 <td>Valor</td>
                 <td>Forma de Pagamento</td>
-                @endif
             </tr>
             <tr>
                 <td>{{date("d/m/Y H:i:s", strtotime($venda->created_at))}}</td>
                 <td>{{$venda->lote->quadra->loteamento->nome}}</td>
-                <td>{{$venda->lote->quadra->descricao}}</td>
-                <td>{{$venda->lote->descricao}}</td>
+                <td>{{$venda->lote->quadra->descricao}} / {{$venda->lote->descricao}}</td>
                 <td>{{numberToMoney($venda->lote->valor)}}</td>
-                <td>{{numberToMoney($venda->lote->valor)}}</td>
-                @endif
+                <td>{{$formas_pagamento[$venda->forma_pagamento]}}</td>
             </tr>
         </table>
     </div>
