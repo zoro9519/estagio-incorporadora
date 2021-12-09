@@ -122,7 +122,6 @@
                         <div class="row">
                             <div class="col-12">
                                 <h6>{{$loteamento->landingPage->endereco_completo}}</h6>
-                                <h6>Rodovia José Silva, KM 31 - Presidente Prudente / SP</h6>
                             </div>
                         </div>
                         <div class="row" style="height: 400px">

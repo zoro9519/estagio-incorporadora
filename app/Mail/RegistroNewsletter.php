@@ -13,9 +13,9 @@ class RegistroNewsletter extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public User $user;
-    public Loteamento $loteamento;
-    public Array $data;
+    public $user;
+    public $loteamento;
+    public $data;
 
     /**
      * Create a new message instance.

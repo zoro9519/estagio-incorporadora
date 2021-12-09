@@ -104,12 +104,14 @@
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label for="uf">UF: *</label>
-                                            <select class="form-control" name="uf" required>
+                                            <input type="text" class="form-control" name="uf"
+                                                value="{{ Auth::user()->uf ?? '' }}" required>
+                                            {{-- <select class="form-control" name="uf" required>
                                                 @foreach ($ufs as $uf => $state)
                                                 <option value="{{$uf}}" {{$uf == Auth::user()->uf ? 'selected' : ''}}>{{$state}}
                                                 </option>
                                                 @endforeach
-                                            </select>
+                                            </select> --}}
                                         </div>
                                     </div>
                                 </div>
