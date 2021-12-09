@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             // Endereco
             $table->string("logradouro", 100)->nullable();
             $table->string("numero", 10)->nullable();
-            $table->string("complemento", 100)->default("");
+            $table->string("complemento", 100)->nullable()->default("");
             $table->string("bairro", 100)->nullable();
             $table->string("cidade", 100)->nullable();
             $table->string("uf", 2)->nullable();
